@@ -1,7 +1,10 @@
 <script>
+  import * as env from '$env/static/public';
   import { login } from '$lib/stores/auth';
   import { goto } from '$app/navigation';
   import { fade, fly } from 'svelte/transition';
+
+  const apiBaseUrl = env.PUBLIC_API_BASE_URL || 'http://localhost:8000';
 
   let email = '';
   let password = '';
@@ -101,7 +104,7 @@
         </div>
 
         <a
-          href="http://localhost:8000/api/auth/google/login"
+          href="{apiBaseUrl}/api/auth/google/login"
           class="w-full h-12 flex items-center justify-center gap-3 bg-white border border-slate-200 text-slate-700 font-bold uppercase tracking-wider text-[11px] hover:bg-slate-50 transition-colors shadow-sm"
         >
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
