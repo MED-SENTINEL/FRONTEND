@@ -109,4 +109,7 @@ export const shareApi = {
         method: 'POST',
         body: JSON.stringify({ passcode }),
     }),
+    getFileUrl: (shareKey, passcode, reportId) => {
+        return `${BASE_URL}/api/share/validate/${shareKey}/file/${reportId}?passcode=${passcode}`;
+    }
 };
