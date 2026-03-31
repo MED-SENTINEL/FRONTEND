@@ -31,12 +31,12 @@
         <svg class="w-3 h-3 text-sentinel-optimal" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <span class="text-[9px] font-bold text-sentinel-optimal tracking-widest uppercase italic">TIMELINE_SYNC_ACTIVE</span>
+        <span class="text-xs font-semibold text-sentinel-optimal">Medical Timeline Active</span>
       </div>
-      <h1 class="text-4xl font-black tracking-tight text-sentinel-text uppercase leading-tight">
-        DIGITAL <span class="text-sentinel-optimal italic font-black">TIMELINE</span>
+      <h1 class="text-4xl font-bold tracking-tight text-sentinel-text leading-tight">
+        Your Health <span class="text-sentinel-optimal italic font-bold">Timeline</span>
       </h1>
-      <div class="text-[10px] text-sentinel-dim tracking-[0.4em] uppercase font-mono">ARCHIVE_MANAGEMENT // CHRONOLOGICAL_EVENT_STREAM</div>
+      <div class="text-sm text-sentinel-dim font-medium">View your complete medical history in chronological order.</div>
     </div>
   </div>
 
@@ -47,18 +47,18 @@
       <ReportUpload on:uploadComplete={fetchMyData} />
       
       <div class="hud-panel p-6 bg-gradient-to-br from-sentinel-optimal/5 to-transparent border-slate-200">
-        <div class="text-[10px] font-bold text-sentinel-text uppercase tracking-[0.3em] mb-4 flex items-center gap-2">
-          <div class="w-2 h-2 rounded-full bg-sentinel-optimal animate-pulse"></div>
-          TIMELINE_STATS
+        <div class="text-xs font-bold text-sentinel-text mb-4 flex items-center gap-2">
+          <div class="w-2 h-2 rounded-full bg-sentinel-optimal"></div>
+          Timeline Statistics
         </div>
         <div class="space-y-3">
           <div class="flex justify-between items-center pb-2 border-b border-slate-100">
-            <span class="text-[9px] text-sentinel-dim uppercase tracking-widest font-mono">LAB_REPORTS</span>
-            <span class="text-sm font-black text-sentinel-text">{$reports.length}</span>
+            <span class="text-xs text-sentinel-dim">Lab Reports</span>
+            <span class="text-sm font-bold text-sentinel-text">{$reports.length}</span>
           </div>
           <div class="flex justify-between items-center">
-            <span class="text-[9px] font-bold text-sentinel-optimal uppercase tracking-widest">TOTAL_NODES</span>
-            <span class="text-lg font-black text-sentinel-optimal">{timeline.length}</span>
+            <span class="text-xs font-semibold text-sentinel-optimal">Total Records</span>
+            <span class="text-lg font-bold text-sentinel-optimal">{timeline.length}</span>
           </div>
         </div>
       </div>
@@ -72,7 +72,7 @@
       {#if $loading && timeline.length === 0}
         <div class="py-20 flex flex-col items-center justify-center space-y-4">
           <div class="w-6 h-6 rounded-full border-2 border-sentinel-optimal/20 border-t-sentinel-optimal animate-spin"></div>
-          <div class="text-[9px] text-sentinel-dim animate-pulse uppercase tracking-widest">QUERYING_CHRONOLOGY_NODES...</div>
+          <div class="text-xs text-sentinel-dim animate-pulse font-medium">Fetching medical timeline...</div>
         </div>
       {:else}
         <div class="space-y-8 relative z-10">
@@ -99,7 +99,7 @@
 
               <!-- Content Card -->
               <div class="flex-1 min-w-0">
-                <div class="text-[10px] font-bold text-sentinel-dim uppercase tracking-[0.2em] mb-2 pl-1">
+                <div class="text-[11px] font-semibold text-sentinel-dim mb-2 pl-1">
                   {item.sortDate.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
                 </div>
                 
@@ -141,8 +141,8 @@
 
           {#if timeline.length === 0 && !$loading}
             <div class="hud-panel p-16 text-center opacity-40 border-dashed ml-16 bg-white">
-              <div class="text-[10px] text-sentinel-dim uppercase tracking-widest font-mono">TIMELINE_EMPTY</div>
-              <p class="text-[9px] text-sentinel-dim/60 uppercase mt-2">UPLOAD A DOCUMENT OR LOG A CONDITION TO BEGIN THE CHRONOLOGY</p>
+              <div class="text-sm text-sentinel-dim font-bold">Timeline is empty</div>
+              <p class="text-xs text-sentinel-dim/60 mt-2">Upload a document or log a condition to begin your health history.</p>
             </div>
           {/if}
         </div>

@@ -99,23 +99,12 @@
             d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
           />
         </svg>
-        <span
-          class="text-[9px] font-bold text-sentinel-optimal tracking-widest uppercase italic"
-          >ENCRYPTED_SHARE_ACTIVE</span
-        >
+        <span class="text-xs font-semibold text-sentinel-optimal">Secure Sharing Active</span>
       </div>
-      <h1
-        class="text-4xl font-bold tracking-tight text-sentinel-text uppercase leading-tight"
-      >
-        EXTERNAL <span class="text-sentinel-optimal italic font-black"
-          >ACCESS</span
-        >
+      <h1 class="text-4xl font-bold tracking-tight text-sentinel-text leading-tight">
+        Share <span class="text-sentinel-optimal italic font-bold">Records</span>
       </h1>
-      <div
-        class="text-[10px] text-sentinel-dim tracking-[0.3em] uppercase font-mono"
-      >
-        ENCRYPTION_LAYER_v2 // TEMPORARY_GATEWAYS
-      </div>
+      <div class="text-sm text-sentinel-dim font-medium">Manage secure access tokens for your healthcare providers.</div>
     </div>
 
     <button
@@ -135,7 +124,7 @@
           d="M12 6v6m0 0v6m0-6h6m-6 0H6"
         />
       </svg>
-      {showGenerateForm ? "CANCEL" : "GENERATE_ACCESS_TOKEN"}
+      {showGenerateForm ? "Cancel" : "Create Access Token"}
     </button>
   </div>
 
@@ -145,21 +134,14 @@
       class="hud-panel p-8 bg-white border-sentinel-optimal/20 space-y-6"
       in:fly={{ y: -10 }}
     >
-      <div
-        class="text-xs font-bold text-sentinel-text uppercase tracking-[0.2em] border-b border-slate-200 pb-4 flex items-center gap-2"
-      >
-        <div
-          class="w-2 h-2 rounded-full bg-sentinel-optimal animate-pulse"
-        ></div>
-        NEW_ACCESS_TOKEN_CONFIGURATION
+      <div class="text-sm font-bold text-sentinel-text border-b border-slate-200 pb-4 flex items-center gap-2">
+        <div class="w-2 h-2 rounded-full bg-sentinel-optimal"></div>
+        New Access Token Setup
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="space-y-2">
-          <label
-            class="text-[9px] text-sentinel-dim tracking-[0.2em] uppercase font-bold px-1"
-            >PASSCODE (4-6 DIGITS)*</label
-          >
+          <label class="text-[11px] text-sentinel-dim font-bold px-1">Security Passcode (4-6 digits)*</label>
           <input
             type="text"
             bind:value={passcode}
@@ -171,21 +153,15 @@
         </div>
 
         <div class="space-y-2">
-          <label
-            class="text-[9px] text-sentinel-dim tracking-[0.2em] uppercase font-bold px-1"
-            >PERMISSIONS</label
-          >
-          <select bind:value={permissions} class="hud-input font-mono">
-            <option value="full">FULL ACCESS</option>
-            <option value="labs_only">LABS ONLY</option>
+          <label class="text-[11px] text-sentinel-dim font-bold px-1">Access Level</label>
+          <select bind:value={permissions} class="hud-input">
+            <option value="full">Full Access</option>
+            <option value="labs_only">Lab Reports Only</option>
           </select>
         </div>
 
         <div class="space-y-2">
-          <label
-            class="text-[9px] text-sentinel-dim tracking-[0.2em] uppercase font-bold px-1"
-            >DOCTOR NAME</label
-          >
+          <label class="text-[11px] text-sentinel-dim font-bold px-1">Doctor Name</label>
           <input
             type="text"
             bind:value={doctorName}
@@ -195,10 +171,7 @@
         </div>
 
         <div class="space-y-2">
-          <label
-            class="text-[9px] text-sentinel-dim tracking-[0.2em] uppercase font-bold px-1"
-            >EXPIRES IN (HOURS)</label
-          >
+          <label class="text-[11px] text-sentinel-dim font-bold px-1">Expires In (Hours)</label>
           <input
             type="number"
             bind:value={expiresInHours}
@@ -209,10 +182,7 @@
         </div>
 
         <div class="space-y-2 md:col-span-2">
-          <label
-            class="text-[9px] text-sentinel-dim tracking-[0.2em] uppercase font-bold px-1"
-            >LABEL (OPTIONAL)</label
-          >
+          <label class="text-[11px] text-sentinel-dim font-bold px-1">Label (Optional)</label>
           <input
             type="text"
             bind:value={label}
@@ -228,25 +198,13 @@
         class="hud-button w-full py-3"
       >
         {#if generatingKey}
-          <div
-            class="w-4 h-4 border-2 border-white/20 border-t-sentinel-optimal rounded-full animate-spin"
-          ></div>
-          GENERATING_SECURE_KEY...
+          <div class="w-4 h-4 border-2 border-white/20 border-t-sentinel-optimal rounded-full animate-spin"></div>
+          Creating secure token...
         {:else}
-          <svg
-            class="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-            />
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
           </svg>
-          ENCRYPT_AND_GENERATE
+          Create Secure Token
         {/if}
       </button>
     </div>
@@ -259,16 +217,12 @@
     <div
       class="flex items-center justify-between border-b border-slate-200 pb-4"
     >
-      <div
-        class="text-[11px] font-bold text-sentinel-text uppercase tracking-[0.2em] flex items-center gap-2"
-      >
-        <div
-          class="w-2 h-2 rounded-full bg-sentinel-optimal animate-pulse"
-        ></div>
-        ACTIVE_RECIPIENT_LIST
+      <div class="text-sm font-bold text-sentinel-text flex items-center gap-2">
+        <div class="w-2 h-2 rounded-full bg-sentinel-optimal"></div>
+        Active Access Tokens
       </div>
-      <div class="text-[8px] font-mono text-sentinel-dim uppercase">
-        TOTAL_KEYS: {keys.length.toString().padStart(2, "0")}
+      <div class="text-[10px] font-semibold text-sentinel-dim">
+        Total Tokens: {keys.length.toString().padStart(2, "0")}
       </div>
     </div>
 
@@ -277,24 +231,15 @@
         <div
           class="w-8 h-8 rounded-full border-2 border-sentinel-optimal/20 border-t-sentinel-optimal animate-spin mx-auto"
         ></div>
-        <div
-          class="text-[10px] text-sentinel-dim animate-pulse uppercase tracking-widest"
-        >
-          QUERYING_VAULT...
-        </div>
+        <div class="text-xs text-sentinel-dim animate-pulse font-medium">Fetching active tokens...</div>
       </div>
     {:else if keys.length === 0}
       <div
         class="py-20 text-center space-y-4 opacity-50 border border-dashed border-slate-200 rounded-2xl bg-slate-50/50"
       >
-        <div class="text-[10px] text-sentinel-dim uppercase tracking-[0.4em]">
-          NO_RECORDS_FOUND
-        </div>
-        <p
-          class="text-[10px] text-sentinel-dim/60 uppercase tracking-tighter max-w-xs mx-auto"
-        >
-          GENERATE A RECIPIENT KEY TO ALLOW YOUR MEDICAL PROVIDER SECURE ACCESS
-          TO YOUR BIO-TWIN DATA.
+        <div class="text-sm text-sentinel-dim font-bold">No active tokens found</div>
+        <p class="text-xs text-sentinel-dim/60 max-w-xs mx-auto">
+          Create an access token to allow your healthcare providers secure access to your clinical records.
         </p>
       </div>
     {:else}
@@ -312,10 +257,7 @@
             >
               <div class="flex flex-wrap gap-8">
                 <div class="space-y-1">
-                  <span
-                    class="text-[8px] text-sentinel-dim uppercase font-bold tracking-widest block"
-                    >TOKEN_ID</span
-                  >
+                  <span class="text-[10px] text-sentinel-dim font-bold block">Access Token</span>
                   <div class="flex items-center gap-2">
                     <span
                       class="text-xs font-mono text-sentinel-optimal font-bold"
@@ -333,41 +275,20 @@
                   </div>
                 </div>
                 <div class="space-y-1">
-                  <span
-                    class="text-[8px] text-sentinel-dim uppercase font-bold tracking-widest block"
-                    >DOCTOR</span
-                  >
-                  <span
-                    class="text-xs font-bold text-sentinel-text uppercase tracking-wider"
-                    >{key.doctor_name || "NOT SPECIFIED"}</span
-                  >
+                  <span class="text-[10px] text-sentinel-dim font-bold block">Doctor</span>
+                  <span class="text-xs font-bold text-sentinel-text">{key.doctor_name || "Not Specified"}</span>
                 </div>
                 <div class="space-y-1">
-                  <span
-                    class="text-[8px] text-sentinel-dim uppercase font-bold tracking-widest block"
-                    >PERMISSIONS</span
-                  >
-                  <span class="text-xs font-mono text-sentinel-text uppercase"
-                    >{key.permissions}</span
-                  >
+                  <span class="text-[10px] text-sentinel-dim font-bold block">Access Level</span>
+                  <span class="text-xs font-semibold text-sentinel-text">{key.permissions}</span>
                 </div>
                 <div class="space-y-1">
-                  <span
-                    class="text-[8px] text-sentinel-dim uppercase font-bold tracking-widest block"
-                    >EXPIRES</span
-                  >
-                  <span class="text-xs text-sentinel-muted font-mono"
-                    >{new Date(key.expires_at).toLocaleDateString()}</span
-                  >
+                  <span class="text-[10px] text-sentinel-dim font-bold block">Expires</span>
+                  <span class="text-xs text-sentinel-muted font-semibold">{new Date(key.expires_at).toLocaleDateString()}</span>
                 </div>
                 <div class="space-y-1">
-                  <span
-                    class="text-[8px] text-sentinel-dim uppercase font-bold tracking-widest block"
-                    >USES</span
-                  >
-                  <span class="text-xs font-mono text-sentinel-text"
-                    >{key.usage_count}/{key.max_uses}</span
-                  >
+                  <span class="text-[10px] text-sentinel-dim font-bold block">Uses</span>
+                  <span class="text-xs font-semibold text-sentinel-text">{key.usage_count}/{key.max_uses}</span>
                 </div>
               </div>
 
@@ -382,7 +303,7 @@
                   on:click={() => revokeKey(key.id)}
                   class="px-4 py-2 rounded-lg border border-sentinel-critical/30 bg-sentinel-critical/5 text-[9px] font-bold hud-text-critical hover:bg-sentinel-critical/10 hover:border-sentinel-critical transition-all uppercase opacity-0 group-hover:opacity-100"
                 >
-                  REVOKE_ACCESS
+                  Revoke Access
                 </button>
               {/if}
             </div>
@@ -422,17 +343,9 @@
         </svg>
       </div>
       <div class="space-y-1">
-        <div
-          class="text-[10px] font-bold text-sentinel-text uppercase tracking-widest"
-        >
-          SECURITY PROTOCOL
-        </div>
-        <p
-          class="text-[10px] text-sentinel-dim uppercase tracking-tighter leading-relaxed"
-        >
-          EACH TOKEN PROVIDES A TEMPORARY READ-ONLY GATEWAY TO YOUR BIO-TWIN
-          PROFILE. SHARE THE KEY AND PASSCODE WITH YOUR DOCTOR. YOU CAN REVOKE
-          ACCESS INSTANTLY AT ANY TIME.
+        <div class="text-xs font-bold text-sentinel-text">Security Information</div>
+        <p class="text-xs text-sentinel-dim leading-relaxed">
+          Each token provides temporary read-only access to your records. Share the key and passcode with your provider. Access can be revoked at any time.
         </p>
       </div>
     </div>

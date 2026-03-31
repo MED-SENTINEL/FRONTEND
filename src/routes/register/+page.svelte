@@ -49,13 +49,13 @@
           <path d="M12 2L3 7v9c0 5.25 3.84 10.13 9 11.5 5.16-1.37 9-6.25 9-11.5V7l-9-5z"/>
         </svg>
       </div>
-      <h1 class="text-3xl font-bold tracking-[0.3em] text-sentinel-text uppercase">INITIALIZE</h1>
-      <div class="text-[10px] text-sentinel-muted tracking-[0.4em] uppercase font-mono">Digital-Twin Setup Protocol</div>
+      <h1 class="text-3xl font-bold tracking-tight text-sentinel-text">Join Sentinel</h1>
+      <div class="text-sm text-sentinel-muted font-medium">Create your health profile</div>
     </div>
 
     <!-- Registration Card -->
     <div class="hud-panel p-8 bg-white/50 border-slate-200 shadow-2xl space-y-6">
-      <div class="text-xs font-bold text-sentinel-text tracking-[0.3em] uppercase border-b border-slate-200 pb-4">SUBJECT_ENROLLMENT</div>
+      <div class="text-sm font-semibold text-sentinel-text border-b border-slate-100 pb-4">Patient Registration</div>
 
       {#if errorMsg}
         <div class="p-3 rounded-lg bg-sentinel-critical/10 border border-sentinel-critical/20 text-[9px] hud-text-critical uppercase tracking-widest leading-relaxed" in:fade>
@@ -65,35 +65,33 @@
 
       <form on:submit|preventDefault={handleRegister} class="space-y-4">
         <div class="space-y-1.5">
-          <label for="name" class="text-[8px] text-sentinel-dim tracking-[0.2em] uppercase font-bold px-1">LEGAL_FULL_NAME</label>
+          <label for="name" class="text-sm text-sentinel-dim font-medium px-1">Full Name</label>
           <input id="name" type="text" bind:value={full_name} required class="hud-input h-11" placeholder="ENTER SUBJECT NAME" />
         </div>
 
         <div class="space-y-1.5">
-          <label for="reg-email" class="text-[8px] text-sentinel-dim tracking-[0.2em] uppercase font-bold px-1">ACCESS_EMAIL</label>
+          <label for="reg-email" class="text-sm text-sentinel-dim font-medium px-1">Email Address</label>
           <input id="reg-email" type="email" bind:value={email} required class="hud-input h-11" placeholder="ENTER VALID EMAIL" />
         </div>
 
         <div class="space-y-1.5">
-          <label for="reg-pass" class="text-[8px] text-sentinel-dim tracking-[0.2em] uppercase font-bold px-1">SECURITY_KEY</label>
+          <label for="reg-pass" class="text-sm text-sentinel-dim font-medium px-1">Password</label>
           <input id="reg-pass" type="password" bind:value={password} required minlength="6" class="hud-input h-11" placeholder="MIN. 6 CHARACTERS" />
         </div>
 
         <div class="space-y-1.5">
-          <label for="confirm-pass" class="text-[8px] text-sentinel-dim tracking-[0.2em] uppercase font-bold px-1">CONFIRM_SECURITY_KEY</label>
+          <label for="confirm-pass" class="text-sm text-sentinel-dim font-medium px-1">Confirm Password</label>
           <input id="confirm-pass" type="password" bind:value={confirmPassword} required minlength="6" class="hud-input h-11" placeholder="RE-ENTER KEY" />
         </div>
 
         <button type="submit" disabled={submitting}
           class="w-full hud-button hud-button-accent py-3.5 text-xs tracking-[0.3em] font-bold mt-4">
-          {submitting ? 'INITIALIZING...' : 'CREATE ACCOUNT'}
+          {submitting ? 'Creating account...' : 'Sign Up'}
         </button>
       </form>
 
       <div class="pt-4 border-t border-slate-200 text-center">
-        <div class="text-[10px] text-sentinel-dim tracking-widest uppercase">
-          ALREADY ENROLLED? <a href="/login" class="text-sentinel-optimal hover:underline font-bold">RE-ACCESS</a>
-        </div>
+          Already have an account? <a href="/login" class="text-sentinel-optimal hover:underline font-bold">Sign In</a>
       </div>
     </div>
   </div>

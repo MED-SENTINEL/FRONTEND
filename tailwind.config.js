@@ -23,8 +23,7 @@ export default {
         'sentinel-dim': '#64748B',       // Slate 500
       },
       fontFamily: {
-        sans: ['Outfit', 'sans-serif'],
-        mono: ['JetBrains Mono', 'monospace'],
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
         'hud-glow': '0 4px 20px rgba(8, 145, 178, 0.08)',

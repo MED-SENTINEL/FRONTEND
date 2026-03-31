@@ -127,9 +127,9 @@
         ></div>
       </div>
       <div
-        class="text-[10px] hud-text-optimal tracking-[0.5em] animate-pulse uppercase font-black"
+        class="text-sm text-sentinel-optimal animate-pulse font-medium"
       >
-        ACCESSING_DATA_VAULT...
+        Loading patient records...
       </div>
     </div>
   {:else if $error}
@@ -154,15 +154,15 @@
         </svg>
       </div>
       <div
-        class="text-sm font-bold hud-text-critical uppercase tracking-[0.3em]"
+        class="text-sm font-semibold text-sentinel-critical"
       >
-        ENCRYPTED_ACCESS_FAILED
+        Connection Interrupted
       </div>
-      <div class="text-[11px] text-sentinel-dim max-w-sm mx-auto font-mono">
-        {$error}
+      <div class="text-sm text-sentinel-dim max-w-sm mx-auto">
+        Unable to securely access your medical vault. Please try again.
       </div>
-      <button on:click={fetchMyData} class="hud-button mx-auto mt-4 px-8"
-        >RETRY_HANDSHAKE</button
+      <button on:click={fetchMyData} class="hud-button hud-button-accent mx-auto mt-4 px-8"
+        >Reconnect System</button
       >
     </div>
   {:else}
@@ -173,7 +173,7 @@
       >
         <div class="space-y-3">
           <div
-            class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sentinel-optimal/5 border border-sentinel-optimal/20 mb-2"
+            class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sentinel-optimal/5 border border-sentinel-optimal/10 mb-2"
           >
             <span class="relative flex h-2 w-2">
               <span
@@ -184,21 +184,21 @@
               ></span>
             </span>
             <span
-              class="text-[9px] font-bold hud-text-optimal tracking-widest uppercase italic"
-              >DATA_REPOSITORIES_STABLE</span
+              class="text-xs font-semibold text-sentinel-optimal"
+              >Secure Connection Active</span
             >
           </div>
           <h1
-            class="text-5xl font-black tracking-tight text-sentinel-text uppercase leading-tight"
+            class="text-4xl font-bold tracking-tight text-sentinel-text"
           >
-            DASHBOARD
+            Patient Dashboard
           </h1>
           <div
-            class="text-[10px] text-sentinel-dim tracking-[0.4em] uppercase font-mono flex items-center gap-3"
+            class="text-sm text-sentinel-dim flex items-center gap-3"
           >
-            <span>ARCHIVE_VAULT</span>
-            <span class="w-1 h-1 rounded-full bg-slate-200"></span>
-            <span>SUBJECT_{$currentUser?.id?.substring(0, 8)}</span>
+            <span>Medical Vault</span>
+            <span class="w-1.5 h-1.5 rounded-full bg-slate-200"></span>
+            <span>Patient ID: {$currentUser?.id?.substring(0, 8).toUpperCase()}</span>
           </div>
         </div>
 
@@ -252,12 +252,12 @@
       >
         <div class="flex justify-between items-start mb-4">
           <div
-            class="text-[9px] text-sentinel-dim uppercase tracking-[0.3em] font-bold"
+            class="text-xs text-sentinel-dim font-semibold"
           >
-            BIO_ARCHIVES
+            Report Archive
           </div>
           <svg
-            class="w-4 h-4 text-sentinel-optimal/40"
+            class="w-5 h-5 text-sentinel-optimal/40"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -270,13 +270,13 @@
             />
           </svg>
         </div>
-        <div class="text-4xl font-black text-sentinel-text mb-1">
+        <div class="text-4xl font-bold text-sentinel-text mb-1">
           {$reports.length}
         </div>
         <div
-          class="text-[9px] text-sentinel-dim uppercase tracking-widest font-mono"
+          class="text-xs text-sentinel-dim"
         >
-          LAB_REPORTS_LOADED
+          Lab Reports Available
         </div>
       </div>
 
@@ -285,12 +285,12 @@
       >
         <div class="flex justify-between items-start mb-4">
           <div
-            class="text-[9px] text-sentinel-dim uppercase tracking-[0.3em] font-bold"
+            class="text-xs text-sentinel-dim font-semibold"
           >
-            MEDICAL_RECORDS
+            Health Records
           </div>
           <svg
-            class="w-4 h-4 text-sentinel-warning/40"
+            class="w-5 h-5 text-sentinel-warning/40"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -303,13 +303,13 @@
             />
           </svg>
         </div>
-        <div class="text-4xl font-black text-sentinel-text mb-1">
+        <div class="text-4xl font-bold text-sentinel-text mb-1">
           {$traumaPins.length}
         </div>
         <div
-          class="text-[9px] text-sentinel-dim uppercase tracking-widest font-mono"
+          class="text-xs text-sentinel-dim"
         >
-          CONDITIONS_LOGGED
+          Conditions Logged
         </div>
       </div>
 
@@ -351,23 +351,23 @@
       >
         <div class="flex justify-between items-start mb-4">
           <div
-            class="text-[9px] text-sentinel-dim uppercase tracking-[0.3em] font-bold"
+            class="text-xs text-sentinel-dim font-semibold"
           >
-            SYSTEM_STATUS
+            Vitals Status
           </div>
           <div
-            class="w-2 h-2 rounded-full bg-sentinel-optimal shadow-[0_0_10px_#06B6D4] animate-pulse"
+            class="w-2.5 h-2.5 rounded-full bg-sentinel-optimal shadow-[0_0_12px_#06B6D4] animate-pulse"
           ></div>
         </div>
         <div
-          class="text-xl font-bold text-sentinel-text mb-1 uppercase tracking-tighter"
+          class="text-xl font-bold text-sentinel-text mb-1"
         >
-          NOMINAL
+          STABLE
         </div>
         <div
-          class="text-[9px] text-sentinel-dim uppercase tracking-widest font-mono"
+          class="text-xs text-sentinel-dim"
         >
-          ALL_NODES_STABLE
+          All readings normal
         </div>
       </div>
     </section>
@@ -379,10 +379,10 @@
     >
       <div class="flex items-center justify-between">
         <h2
-          class="text-xs font-black text-sentinel-text tracking-[0.5em] uppercase flex items-center gap-3"
+          class="text-sm font-bold text-sentinel-text flex items-center gap-3"
         >
-          <div class="w-2 h-2 bg-sentinel-warning rotate-45"></div>
-          MEDICAL_HISTORY
+          <div class="w-2 h-2 bg-sentinel-warning rounded-sm"></div>
+          Medical History
         </h2>
         <button
           on:click={() => (showAddForm = !showAddForm)}
@@ -419,9 +419,9 @@
             class="text-[10px] font-bold text-sentinel-text uppercase tracking-[0.2em] border-b border-slate-200 pb-3 flex items-center gap-2"
           >
             <div
-              class="w-1.5 h-1.5 rounded-full bg-sentinel-optimal animate-pulse"
+              class="w-2 h-2 rounded-full bg-sentinel-optimal animate-pulse"
             ></div>
-            NEW_MEDICAL_ENTRY
+            New Health Entry
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="space-y-1.5 md:col-span-2">
@@ -516,9 +516,9 @@
               <div
                 class="w-3 h-3 border-2 border-white/20 border-t-sentinel-optimal rounded-full animate-spin"
               ></div>
-              RECORDING...
+              Saving...
             {:else}
-              LOG_MEDICAL_ENTRY
+              Save Health Entry
             {/if}
           </button>
         </div>
@@ -632,10 +632,10 @@
     >
       <div class="space-y-6">
         <h2
-          class="text-xs font-black text-sentinel-text tracking-[0.5em] uppercase flex items-center gap-3"
+          class="text-sm font-bold text-sentinel-text flex items-center gap-3"
         >
-          <div class="w-2 h-2 bg-sentinel-optimal rotate-45"></div>
-          QUICK_ACCESS_LAYERS
+          <div class="w-2 h-2 bg-sentinel-optimal rounded-sm"></div>
+          Quick Actions
         </h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {#each quickLinks as link}
@@ -675,29 +675,28 @@
       >
         <div class="relative z-10 space-y-6">
           <div
-            class="text-[10px] text-sentinel-optimal uppercase tracking-[0.4em] font-black"
+            class="text-xs text-sentinel-optimal font-bold"
           >
-            BIO-DIGITAL_TWIN
+            3D Health Model
           </div>
           <h3
-            class="text-2xl font-bold text-sentinel-text leading-tight uppercase"
+            class="text-2xl font-bold text-sentinel-text leading-tight"
           >
-            PROJECTION_MODALITY<br /><span class="text-sentinel-dim italic"
-              >ACTIVE_ENCODING</span
+            Interactive View<br /><span class="text-sentinel-dim font-medium italic"
+              >Current Analysis</span
             >
           </h3>
           <p
-            class="text-[10px] text-sentinel-dim leading-relaxed tracking-wider max-w-sm uppercase font-mono"
+            class="text-xs text-sentinel-dim leading-relaxed max-w-sm"
           >
-            YOUR DIGITAL TWIN IS SYNCHRONIZED WITH THE LATEST ARCHIVAL DATA.
-            REVIEWS CLINICAL PHENOTYPES AND ANATOMICAL MAPS IN THE BIO-TWIN
-            INTERFACE.
+            Your digital health model is updated with your latest medical records.
+            Review clinical data and anatomical maps in the 3D interface.
           </p>
           <a
             href="/twin"
             class="inline-flex items-center gap-3 text-[10px] font-black text-sentinel-optimal uppercase tracking-[0.3em] hover:gap-5 transition-all"
           >
-            INITIALIZE_3D_RENDER
+            Open 3D Model
             <svg
               class="w-4 h-4"
               fill="none"
@@ -753,7 +752,7 @@
               <div
                 class="text-[9px] text-sentinel-dim uppercase tracking-[0.4em] font-bold mb-1"
               >
-                EMERGENCY_LOCATOR
+                Emergency Contact
               </div>
               <div
                 class="text-xl font-black text-sentinel-text uppercase tracking-widest italic group-hover:tracking-[0.2em] transition-all"
@@ -766,7 +765,7 @@
             <div
               class="text-[9px] text-sentinel-dim uppercase tracking-widest font-mono mb-2 opacity-50"
             >
-              ENCRYPTED_COMMS_CHANNELS_OPEN
+              Secure connection active
             </div>
             <div class="flex gap-2 justify-end">
               <div

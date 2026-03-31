@@ -28,11 +28,7 @@
 {:else if $isAuthenticated}
   <div class="h-screen flex bg-sentinel-bg text-sentinel-text font-sans overflow-hidden relative">
     <!-- Background Noise & Gradients -->
-    <div class="absolute inset-0 z-0 pointer-events-none opacity-20" 
-         style="background-image: url('https://www.transparenttextures.com/patterns/stardust.png');"></div>
-    <div class="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(circle_at_50%_0%,rgba(8, 145, 178, 0.05)_0%,transparent_100%)]"></div>
-    
-    <div class="scanline"></div>
+    <div class="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(circle_at_50%_0%,rgba(8, 145, 178, 0.03)_0%,transparent_100%)]"></div>
     
     <Sidebar />
     

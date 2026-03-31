@@ -31,9 +31,9 @@
   function deriveTitle(item) {
     const d = item.data || {};
     switch (item.type) {
-      case 'report': return d.report_type ? d.report_type.toUpperCase().replace(/_/g, ' ') + ' REPORT' : 'LAB REPORT';
-      case 'trauma': return d.title || 'TRAUMA EVENT';
-      default: return 'EVENT';
+      case 'report': return d.report_type ? d.report_type.replace(/_/g, ' ') + ' Report' : 'Lab Report';
+      case 'trauma': return d.title || 'Medical Event';
+      default: return 'Event';
     }
   }
 
@@ -69,8 +69,8 @@
 
   function getIndicatorColor(type) {
     switch (type) {
-      case 'report': return 'bg-sentinel-optimal shadow-[0_0_10px_#06B6D4]';
-      case 'trauma': return 'bg-sentinel-critical shadow-[0_0_10px_#FF3366]';
+      case 'report': return 'bg-sentinel-optimal';
+      case 'trauma': return 'bg-sentinel-critical';
       default: return 'bg-sentinel-dim';
     }
   }
@@ -83,12 +83,12 @@
         <svg class="w-3 h-3 text-sentinel-dim" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <span class="text-[9px] font-bold text-sentinel-dim tracking-widest uppercase italic">TEMPORAL_LOGS_ACTIVE</span>
+        <span class="text-xs font-semibold text-sentinel-dim">Activity Log Active</span>
       </div>
-      <h1 class="text-4xl font-bold tracking-tight text-sentinel-text uppercase leading-tight">
-        HEALTH <span class="text-sentinel-text italic font-black opacity-20">TIMELINE</span>
+      <h1 class="text-4xl font-bold tracking-tight text-sentinel-text leading-tight">
+        Activity <span class="text-sentinel-text italic font-bold opacity-30">Log</span>
       </h1>
-      <div class="text-[10px] text-sentinel-dim tracking-[0.4em] uppercase font-mono">CHRONOLOGICAL_STREAM // BIOREC_HISTORY // v.1.0</div>
+      <div class="text-sm text-sentinel-dim font-medium">A complete record of your health interactions and data uploads.</div>
     </div>
   </div>
 
@@ -99,11 +99,11 @@
     {#if loading}
       <div class="ml-24 p-12 hud-panel flex flex-col items-center justify-center space-y-4">
         <div class="w-8 h-8 rounded-full border-2 border-sentinel-optimal/20 border-t-sentinel-optimal animate-spin"></div>
-        <div class="text-[10px] text-sentinel-dim animate-pulse uppercase tracking-[0.4em]">SYNCHRONIZING_TEMPORAL_NODES...</div>
+        <div class="text-xs text-sentinel-dim animate-pulse font-medium">Loading activity...</div>
       </div>
     {:else if events.length === 0}
       <div class="ml-24 p-20 text-center hud-panel border-dashed border-slate-200 bg-white opacity-40 rounded-3xl" in:fade>
-        <div class="text-[10px] uppercase tracking-[0.5em] italic">NO_TEMPORAL_MARKERS_DETECTED</div>
+        <div class="text-sm text-sentinel-dim font-bold">No activity found</div>
       </div>
     {:else}
       <div class="space-y-10 pb-20">
@@ -127,13 +127,13 @@
                     </svg>
                   </div>
                   <div class="space-y-1">
-                    <div class="text-[9px] text-sentinel-dim font-bold uppercase tracking-[0.3em] font-mono">{event.type.replace('_', ' ')} // LOG_{i.toString().padStart(3, '0')}</div>
-                    <div class="text-lg font-black text-sentinel-text uppercase tracking-wider group-hover:text-sentinel-optimal transition-colors">{event.title}</div>
+                    <div class="text-[10px] text-sentinel-dim font-bold block mb-1">{event.type.replace('_', ' ')}</div>
+                    <div class="text-lg font-bold text-sentinel-text tracking-tight group-hover:text-sentinel-optimal transition-colors">{event.title}</div>
                   </div>
                 </div>
                 
                 <div class="text-left md:text-right space-y-1">
-                  <div class="text-[9px] text-sentinel-dim uppercase tracking-[0.4em] font-bold">TIMESTAMP</div>
+                  <div class="text-[10px] text-sentinel-dim font-bold">Date & Time</div>
                   <div class="text-xs font-mono text-sentinel-text flex flex-col md:items-end gap-0.5">
                     <span class="font-bold">{new Date(event.date).toLocaleDateString()}</span>
                     <span class="text-[10px] hud-text-optimal opacity-80">{new Date(event.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'}).replace(/:/g, ' ')}</span>
@@ -142,8 +142,8 @@
               </div>
 
               {#if event.summary}
-                <div class="mt-6 pt-6 border-t border-white/5" in:slide>
-                  <div class="text-[11px] text-sentinel-muted uppercase leading-relaxed tracking-wide font-medium bg-slate-50 p-4 rounded-xl border border-slate-200 group-hover:bg-sentinel-optimal/5 group-hover:border-sentinel-optimal/10 transition-all">
+                <div class="mt-6 pt-6 border-t border-slate-100" in:slide>
+                  <div class="text-xs text-sentinel-muted leading-relaxed font-medium bg-slate-50 p-4 rounded-xl border border-slate-200 group-hover:bg-sentinel-optimal/5 group-hover:border-sentinel-optimal/10 transition-all">
                     {event.summary}
                   </div>
                 </div>

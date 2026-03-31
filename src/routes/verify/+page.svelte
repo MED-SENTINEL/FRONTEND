@@ -76,18 +76,18 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
         </svg>
       </div>
-      <h1 class="text-3xl font-bold tracking-[0.3em] text-sentinel-text uppercase">VERIFY</h1>
+      <h1 class="text-3xl font-bold tracking-tight text-sentinel-text">Verify Email</h1>
       <div class="h-px w-12 bg-sentinel-optimal/40 mx-auto"></div>
-      <div class="text-[10px] text-sentinel-muted tracking-[0.4em] uppercase font-mono">Identity Confirmation Protocol</div>
+      <div class="text-xs text-sentinel-muted font-medium">Please enter the verification code sent to your email.</div>
     </div>
 
     <!-- Verify Card -->
     <div class="hud-panel p-8 bg-white/50 border-slate-200 shadow-2xl space-y-8">
-      <div class="text-xs font-bold text-sentinel-text tracking-[0.3em] uppercase border-b border-slate-200 pb-4">VERIFICATION_CODE</div>
+      <div class="text-sm font-bold text-sentinel-text border-b border-slate-200 pb-4 text-center">Enter Code</div>
 
-      <div class="text-center text-[10px] text-sentinel-muted tracking-widest uppercase leading-relaxed px-2">
+      <div class="text-center text-xs text-sentinel-muted leading-relaxed px-2 font-medium">
         A 6-digit code has been sent to<br />
-        <span class="text-sentinel-optimal font-bold">{email || '...'}</span>
+        <span class="text-sentinel-optimal font-bold">{email || 'your email'}</span>
       </div>
 
       {#if errorMsg}
@@ -104,14 +104,14 @@
 
       <form on:submit|preventDefault={handleVerify} class="space-y-6">
         <div class="space-y-2">
-          <label for="code" class="text-[9px] text-sentinel-dim tracking-[0.2em] uppercase font-bold px-1">AUTHORIZATION_CODE</label>
+          <label for="code" class="text-[11px] text-sentinel-dim font-bold px-1 text-center block">Verification Code</label>
           <input
             id="code"
             type="text"
             bind:value={code}
             required
             maxlength="6"
-            class="hud-input font-mono text-center text-2xl tracking-[0.5em]"
+            class="hud-input text-center text-2xl tracking-[0.5em] font-bold"
             placeholder="000000"
             autocomplete="one-time-code"
           />
@@ -119,7 +119,7 @@
 
         {#if !email}
           <div class="space-y-2">
-            <label for="verify-email" class="text-[9px] text-sentinel-dim tracking-[0.2em] uppercase font-bold px-1">IDENTITY_EMAIL</label>
+            <label for="verify-email" class="text-[11px] text-sentinel-dim font-bold px-1">Email Address</label>
             <input
               id="verify-email"
               type="email"
@@ -136,7 +136,7 @@
           disabled={submitting || code.length !== 6}
           class="w-full hud-button py-3.5 text-xs tracking-[0.3em]"
         >
-          {submitting ? 'VERIFYING...' : 'CONFIRM IDENTITY'}
+          {submitting ? 'Verifying...' : 'Verify Account'}
         </button>
       </form>
 
@@ -144,26 +144,26 @@
         <button
           on:click={handleResend}
           disabled={resending || cooldown > 0}
-          class="text-[10px] text-sentinel-optimal tracking-widest uppercase font-bold hover:underline disabled:opacity-40 disabled:no-underline transition-opacity"
+          class="text-xs text-sentinel-optimal font-bold hover:underline disabled:opacity-40 disabled:no-underline transition-opacity"
         >
           {#if cooldown > 0}
-            RESEND IN {cooldown}s
+            Resend in {cooldown}s
           {:else if resending}
-            SENDING...
+            Sending...
           {:else}
-            RESEND CODE
+            Resend Code
           {/if}
         </button>
 
-        <a href="/login" class="text-[10px] text-sentinel-dim tracking-widest uppercase hover:text-sentinel-optimal transition-colors">
-          ← BACK TO LOGIN
+        <a href="/login" class="text-xs text-sentinel-dim font-semibold hover:text-sentinel-optimal transition-colors">
+          ← Back to Login
         </a>
       </div>
     </div>
 
     <!-- Footer -->
-    <div class="mt-8 text-center text-[8px] text-sentinel-dim/40 tracking-[0.5em] uppercase pointer-events-none font-mono">
-      SENTINEL // VERIFICATION PROTOCOL // v.2.0
+    <div class="mt-8 text-center text-[10px] text-sentinel-dim/40 font-medium tracking-widest">
+      Professional Medical Environment
     </div>
   </div>
 </div>

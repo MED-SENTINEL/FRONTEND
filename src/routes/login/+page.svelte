@@ -66,14 +66,14 @@
           <path d="M12 2L3 7v9c0 5.25 3.84 10.13 9 11.5 5.16-1.37 9-6.25 9-11.5V7l-9-5z"/>
         </svg>
       </div>
-      <h1 class="text-4xl font-bold tracking-[0.3em] text-sentinel-text uppercase">SENTINEL</h1>
-      <div class="h-px w-12 bg-sentinel-optimal/40 mx-auto"></div>
-      <div class="text-[10px] text-sentinel-muted tracking-[0.4em] uppercase font-mono">Bio-Digital Trace // Security Protocol</div>
+      <h1 class="text-4xl font-bold tracking-tight text-sentinel-text">Sentinel</h1>
+      <div class="h-1 w-12 bg-sentinel-optimal/20 mx-auto rounded-full"></div>
+      <div class="text-sm text-sentinel-muted font-medium">Secure Patient Portal</div>
     </div>
 
     <!-- Login Card -->
     <div class="hud-panel p-8 bg-white/50 border-slate-200 shadow-2xl space-y-8">
-      <div class="text-xs font-bold text-sentinel-text tracking-[0.3em] uppercase border-b border-slate-200 pb-4">AUTHENTICATION_REQUIRED</div>
+      <div class="text-sm font-semibold text-sentinel-text border-b border-slate-100 pb-4">Sign in to your account</div>
 
       {#if errorMsg}
         <div class="p-4 rounded-lg bg-sentinel-critical/10 border border-sentinel-critical/20 text-[10px] hud-text-critical uppercase tracking-widest leading-relaxed" in:fade>
@@ -83,25 +83,25 @@
 
       <form on:submit|preventDefault={handleLogin} class="space-y-6">
         <div class="space-y-2">
-          <label for="email" class="text-[9px] text-sentinel-dim tracking-[0.2em] uppercase font-bold px-1">IDENTITY_EMAIL</label>
+          <label for="email" class="text-sm text-sentinel-dim font-medium px-1">Email Address</label>
           <input
             id="email"
             type="email"
             bind:value={email}
             required
-            class="hud-input font-mono"
+            class="hud-input"
             placeholder="node.user@sentinel.ai"
           />
         </div>
 
         <div class="space-y-2">
-          <label for="password" class="text-[9px] text-sentinel-dim tracking-[0.2em] uppercase font-bold px-1">TRACE_KEY</label>
+          <label for="password" class="text-sm text-sentinel-dim font-medium px-1">Password</label>
           <input
             id="password"
             type="password"
             bind:value={password}
             required
-            class="hud-input font-mono"
+            class="hud-input"
             placeholder="••••••••"
           />
         </div>
@@ -111,7 +111,7 @@
           disabled={submitting}
           class="w-full hud-button py-3.5 text-xs tracking-[0.3em]"
         >
-          {submitting ? 'SYNCHRONIZING...' : 'ACCESS SYSTEM'}
+          {submitting ? 'Signing in...' : 'Sign In'}
         </button>
 
         <div class="relative flex items-center py-2">
@@ -131,7 +131,7 @@
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
-            SYSTEMS WAKING UP... (~50s)
+            Starting secure server... (~50s)
           {:else}
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -146,9 +146,7 @@
       </form>
 
       <div class="pt-6 border-t border-slate-200 flex flex-col items-center gap-4">
-        <div class="text-[10px] text-sentinel-dim tracking-widest uppercase">
-          NO ACCESS? <a href="/register" class="text-sentinel-optimal hover:underline font-bold">RE-INITIALIZE</a>
-        </div>
+          New patient? <a href="/register" class="text-sentinel-optimal hover:underline font-bold">Create an account</a>
         
         <div class="px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-[8px] text-sentinel-dim tracking-widest font-mono">
           DEMO: demo@sentinel.dev / sentinel123
@@ -157,8 +155,8 @@
     </div>
     
     <!-- Footer Tag -->
-    <div class="mt-8 text-center text-[8px] text-sentinel-dim/40 tracking-[0.5em] uppercase pointer-events-none font-mono">
-      SENTINEL // SECURE ACCESS // v.2.0
+    <div class="mt-8 text-center text-[10px] text-sentinel-dim/40 tracking-wider font-medium">
+      Sentinel Health // Patient Portal // v.2.0
     </div>
   </div>
 </div>
