@@ -1,5 +1,6 @@
 <script>
   import { onMount } from "svelte";
+  import { goto } from "$app/navigation";
   import { currentUser } from "$lib/stores/auth";
   import {
     reports,
@@ -7,20 +8,15 @@
     loading,
     error,
     fetchMyData,
+    deleteTraumaPin,
   } from "$lib/stores/data";
+  import { traumaForm, isPicking, resetForm } from "$lib/stores/form";
+  import { REGION_COORDINATES } from "$lib/constants";
   import { apiFetch } from "$lib/api/client";
   import { fade, fly } from "svelte/transition";
 
-  let showAddForm = false;
   let adding = false;
-  let newRecord = {
-    title: "",
-    notes: "",
-    body_region: "",
-    severity: "medium",
-    trauma_type: "condition",
-    occurred_at: "",
-  };
+  let deleting = null; // Track which record is being deleted
 
   const bodyRegions = [
     "head",
@@ -40,39 +36,62 @@
     "general",
   ];
 
+  // Auto-snap: when body region changes, update coordinates from the lookup map
+  function onRegionChange(region) {
+    traumaForm.update(f => {
+      f.body_region = region;
+      const coords = REGION_COORDINATES[region];
+      if (coords) {
+        f.position_x = coords.x;
+        f.position_y = coords.y;
+        f.position_z = coords.z;
+      }
+      return f;
+    });
+  }
+
+  // "Pick on 3D Model" — enter picking mode and navigate to twin viewer
+  function startPicking() {
+    $isPicking = true;
+    goto("/twin");
+  }
+
   async function addMedicalRecord() {
-    if (!$currentUser || !newRecord.title) return;
+    if (!$currentUser || !$traumaForm.title) return;
     adding = true;
     try {
       await apiFetch("/api/trauma/", {
         method: "POST",
         body: JSON.stringify({
           patient_id: $currentUser.id,
-          position_x: 0,
-          position_y: 0,
-          position_z: 0,
-          title: newRecord.title,
-          trauma_type: newRecord.trauma_type,
-          severity: newRecord.severity,
-          body_region: newRecord.body_region || null,
-          notes: newRecord.notes || null,
-          occurred_at: newRecord.occurred_at || null,
+          position_x: $traumaForm.position_x,
+          position_y: $traumaForm.position_y,
+          position_z: $traumaForm.position_z,
+          title: $traumaForm.title,
+          trauma_type: $traumaForm.trauma_type,
+          severity: $traumaForm.severity,
+          body_region: $traumaForm.body_region || null,
+          notes: $traumaForm.notes || null,
+          occurred_at: $traumaForm.occurred_at || null,
         }),
       });
-      newRecord = {
-        title: "",
-        notes: "",
-        body_region: "",
-        severity: "medium",
-        trauma_type: "condition",
-        occurred_at: "",
-      };
-      showAddForm = false;
+      resetForm();
       await fetchMyData();
     } catch (err) {
       console.error(err);
     } finally {
       adding = false;
+    }
+  }
+
+  async function handleDelete(pinId) {
+    deleting = pinId;
+    try {
+      await deleteTraumaPin(pinId);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      deleting = null;
     }
   }
 
@@ -126,9 +145,7 @@
           class="absolute inset-0 rounded-full border-t-2 border-sentinel-optimal animate-spin"
         ></div>
       </div>
-      <div
-        class="text-sm text-sentinel-optimal animate-pulse font-medium"
-      >
+      <div class="text-sm text-sentinel-optimal animate-pulse font-medium">
         Loading patient records...
       </div>
     </div>
@@ -153,15 +170,15 @@
           />
         </svg>
       </div>
-      <div
-        class="text-sm font-semibold text-sentinel-critical"
-      >
+      <div class="text-sm font-semibold text-sentinel-critical">
         Connection Interrupted
       </div>
       <div class="text-sm text-sentinel-dim max-w-sm mx-auto">
         Unable to securely access your medical vault. Please try again.
       </div>
-      <button on:click={fetchMyData} class="hud-button hud-button-accent mx-auto mt-4 px-8"
+      <button
+        on:click={fetchMyData}
+        class="hud-button hud-button-accent mx-auto mt-4 px-8"
         >Reconnect System</button
       >
     </div>
@@ -183,22 +200,21 @@
                 class="relative inline-flex rounded-full h-2 w-2 bg-sentinel-optimal"
               ></span>
             </span>
-            <span
-              class="text-xs font-semibold text-sentinel-optimal"
+            <span class="text-xs font-semibold text-sentinel-optimal"
               >Secure Connection Active</span
             >
           </div>
-          <h1
-            class="text-4xl font-bold tracking-tight text-sentinel-text"
-          >
+          <h1 class="text-4xl font-bold tracking-tight text-sentinel-text">
             Patient Dashboard
           </h1>
-          <div
-            class="text-sm text-sentinel-dim flex items-center gap-3"
-          >
+          <div class="text-sm text-sentinel-dim flex items-center gap-3">
             <span>Medical Vault</span>
             <span class="w-1.5 h-1.5 rounded-full bg-slate-200"></span>
-            <span>Patient ID: {$currentUser?.id?.substring(0, 8).toUpperCase()}</span>
+            <span
+              >Patient ID: {$currentUser?.id
+                ?.substring(0, 8)
+                .toUpperCase()}</span
+            >
           </div>
         </div>
 
@@ -251,9 +267,7 @@
         class="hud-panel p-6 bg-gradient-to-br from-white to-slate-50/50 border-slate-200 group hover:border-sentinel-optimal/30 transition-all duration-500"
       >
         <div class="flex justify-between items-start mb-4">
-          <div
-            class="text-xs text-sentinel-dim font-semibold"
-          >
+          <div class="text-xs text-sentinel-dim font-semibold">
             Report Archive
           </div>
           <svg
@@ -273,20 +287,14 @@
         <div class="text-4xl font-bold text-sentinel-text mb-1">
           {$reports.length}
         </div>
-        <div
-          class="text-xs text-sentinel-dim"
-        >
-          Lab Reports Available
-        </div>
+        <div class="text-xs text-sentinel-dim">Lab Reports Available</div>
       </div>
 
       <div
         class="hud-panel p-6 bg-gradient-to-br from-white to-slate-50/50 border-slate-200 group hover:border-sentinel-warning/30 transition-all duration-500"
       >
         <div class="flex justify-between items-start mb-4">
-          <div
-            class="text-xs text-sentinel-dim font-semibold"
-          >
+          <div class="text-xs text-sentinel-dim font-semibold">
             Health Records
           </div>
           <svg
@@ -306,11 +314,7 @@
         <div class="text-4xl font-bold text-sentinel-text mb-1">
           {$traumaPins.length}
         </div>
-        <div
-          class="text-xs text-sentinel-dim"
-        >
-          Conditions Logged
-        </div>
+        <div class="text-xs text-sentinel-dim">Conditions Logged</div>
       </div>
 
       <div
@@ -350,25 +354,15 @@
         class="hud-panel p-6 bg-gradient-to-br from-white to-slate-50/50 border-slate-200 group hover:border-sentinel-optimal/30 transition-all duration-500"
       >
         <div class="flex justify-between items-start mb-4">
-          <div
-            class="text-xs text-sentinel-dim font-semibold"
-          >
+          <div class="text-xs text-sentinel-dim font-semibold">
             Vitals Status
           </div>
           <div
             class="w-2.5 h-2.5 rounded-full bg-sentinel-optimal shadow-[0_0_12px_#06B6D4] animate-pulse"
           ></div>
         </div>
-        <div
-          class="text-xl font-bold text-sentinel-text mb-1"
-        >
-          STABLE
-        </div>
-        <div
-          class="text-xs text-sentinel-dim"
-        >
-          All readings normal
-        </div>
+        <div class="text-xl font-bold text-sentinel-text mb-1">STABLE</div>
+        <div class="text-xs text-sentinel-dim">All readings normal</div>
       </div>
     </section>
 
@@ -385,10 +379,10 @@
           Medical History
         </h2>
         <button
-          on:click={() => (showAddForm = !showAddForm)}
+          on:click={() => traumaForm.update(f => ({ ...f, showAddForm: !f.showAddForm }))}
           class="hud-button text-[9px]"
         >
-          {#if showAddForm}
+          {#if $traumaForm.showAddForm}
             CANCEL
           {:else}
             <svg
@@ -410,7 +404,7 @@
       </div>
 
       <!-- Add Record Form -->
-      {#if showAddForm}
+      {#if $traumaForm.showAddForm}
         <div
           class="p-6 rounded-2xl bg-slate-50 border border-sentinel-optimal/20 space-y-5"
           in:fly={{ y: -10 }}
@@ -430,7 +424,7 @@
                 >CONDITION / EVENT *</label
               >
               <input
-                bind:value={newRecord.title}
+                bind:value={$traumaForm.title}
                 placeholder="e.g. Fever, Knee Pain, Surgery..."
                 class="hud-input"
               />
@@ -442,7 +436,7 @@
               >
               <input
                 type="date"
-                bind:value={newRecord.occurred_at}
+                bind:value={$traumaForm.occurred_at}
                 class="hud-input font-mono"
               />
             </div>
@@ -452,7 +446,8 @@
                 >BODY REGION</label
               >
               <select
-                bind:value={newRecord.body_region}
+                value={$traumaForm.body_region}
+                on:change={(e) => onRegionChange(e.target.value)}
                 class="hud-input font-mono"
               >
                 <option value="">-- SELECT --</option>
@@ -469,7 +464,7 @@
                 >TYPE</label
               >
               <select
-                bind:value={newRecord.trauma_type}
+                bind:value={$traumaForm.trauma_type}
                 class="hud-input font-mono"
               >
                 <option value="condition">CONDITION</option>
@@ -485,7 +480,7 @@
                 >SEVERITY</label
               >
               <select
-                bind:value={newRecord.severity}
+                bind:value={$traumaForm.severity}
                 class="hud-input font-mono"
               >
                 <option value="low">LOW</option>
@@ -500,16 +495,39 @@
                 >NOTES</label
               >
               <textarea
-                bind:value={newRecord.notes}
+                bind:value={$traumaForm.notes}
                 rows="2"
                 placeholder="Additional details..."
                 class="hud-input resize-none"
               ></textarea>
             </div>
           </div>
+
+          <!-- Coordinate display + Pick on 3D button -->
+          <div class="flex items-center justify-between p-3 rounded-xl bg-white border border-slate-200">
+            <div class="flex items-center gap-4">
+              <div class="text-[8px] text-sentinel-dim uppercase tracking-[0.2em] font-bold">
+                3D Position
+              </div>
+              <div class="text-[10px] font-mono text-sentinel-text">
+                X: {$traumaForm.position_x.toFixed(2)} · Y: {$traumaForm.position_y.toFixed(2)} · Z: {$traumaForm.position_z.toFixed(2)}
+              </div>
+            </div>
+            <button
+              on:click={startPicking}
+              class="hud-button text-[9px] !border-sentinel-accent/30 !text-sentinel-accent hover:!bg-sentinel-accent/5"
+            >
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              PICK ON 3D MODEL
+            </button>
+          </div>
+
           <button
             on:click={addMedicalRecord}
-            disabled={adding || !newRecord.title}
+            disabled={adding || !$traumaForm.title}
             class="hud-button w-full py-2.5"
           >
             {#if adding}
@@ -604,19 +622,36 @@
                     {/if}
                   </div>
                 </div>
-                <div class="text-right shrink-0">
-                  <div
-                    class="text-[8px] text-sentinel-dim uppercase tracking-widest font-bold"
+                <div class="flex items-start gap-4 shrink-0">
+                  <div class="text-right">
+                    <div
+                      class="text-[8px] text-sentinel-dim uppercase tracking-widest font-bold"
+                    >
+                      DATE
+                    </div>
+                    <div class="text-xs font-mono text-sentinel-text">
+                      {record.occurred_at
+                        ? new Date(record.occurred_at).toLocaleDateString()
+                        : record.created_at
+                          ? new Date(record.created_at).toLocaleDateString()
+                          : "N/A"}
+                    </div>
+                  </div>
+                  <!-- Delete Button -->
+                  <button
+                    on:click={() => handleDelete(record.id)}
+                    disabled={deleting === record.id}
+                    class="p-2 rounded-lg border border-transparent text-sentinel-dim/40 hover:text-sentinel-critical hover:border-sentinel-critical/20 hover:bg-sentinel-critical/5 transition-all opacity-0 group-hover:opacity-100"
+                    title="Delete Record"
                   >
-                    DATE
-                  </div>
-                  <div class="text-xs font-mono text-sentinel-text">
-                    {record.occurred_at
-                      ? new Date(record.occurred_at).toLocaleDateString()
-                      : record.created_at
-                        ? new Date(record.created_at).toLocaleDateString()
-                        : "N/A"}
-                  </div>
+                    {#if deleting === record.id}
+                      <div class="w-4 h-4 border-2 border-sentinel-critical/20 border-t-sentinel-critical rounded-full animate-spin"></div>
+                    {:else}
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    {/if}
+                  </button>
                 </div>
               </div>
             </div>
@@ -674,23 +709,19 @@
         class="hud-panel p-8 relative overflow-hidden bg-gradient-to-br from-sentinel-optimal/5 via-transparent to-transparent"
       >
         <div class="relative z-10 space-y-6">
-          <div
-            class="text-xs text-sentinel-optimal font-bold"
-          >
+          <div class="text-xs text-sentinel-optimal font-bold">
             3D Health Model
           </div>
-          <h3
-            class="text-2xl font-bold text-sentinel-text leading-tight"
-          >
-            Interactive View<br /><span class="text-sentinel-dim font-medium italic"
+          <h3 class="text-2xl font-bold text-sentinel-text leading-tight">
+            Interactive View<br /><span
+              class="text-sentinel-dim font-medium italic"
               >Current Analysis</span
             >
           </h3>
-          <p
-            class="text-xs text-sentinel-dim leading-relaxed max-w-sm"
-          >
-            Your digital health model is updated with your latest medical records.
-            Review clinical data and anatomical maps in the 3D interface.
+          <p class="text-xs text-sentinel-dim leading-relaxed max-w-sm">
+            Your digital health model is updated with your latest medical
+            records. Review clinical data and anatomical maps in the 3D
+            interface.
           </p>
           <a
             href="/twin"

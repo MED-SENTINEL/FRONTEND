@@ -1,6 +1,6 @@
 <script>
-  import { T, useTask } from '@threlte/core';
-  import { DoubleSide, AdditiveBlending } from 'three';
+  import { T, useTask } from "@threlte/core";
+  import { DoubleSide, AdditiveBlending } from "three";
 
   let y = 0;
   let dir = 1;

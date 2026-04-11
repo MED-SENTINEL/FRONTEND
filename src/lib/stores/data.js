@@ -21,7 +21,7 @@ export async function fetchMyData() {
             apiFetch(`/api/trauma/${user.id}`),
             reportsApi.list(user.id)
         ]);
-        
+
         traumaPins.set(tData.map(pin => ({
             ...pin,
             x: pin.position_x,
@@ -69,6 +69,15 @@ export async function addTraumaPin(x, y, z, note = "EXTERNAL_TRAUMA") {
         };
         traumaPins.update(pins => [...pins, normalized]);
         return normalized;
+    } catch (err) {
+        error.set(err.message);
+    }
+}
+
+export async function deleteTraumaPin(pinId) {
+    try {
+        await apiFetch(`/api/trauma/${pinId}`, { method: 'DELETE' });
+        traumaPins.update(pins => pins.filter(p => p.id !== pinId));
     } catch (err) {
         error.set(err.message);
     }
