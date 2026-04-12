@@ -176,3 +176,40 @@ export const bloodworkApi = {
         return true;
     },
 };
+
+
+export const doctorApi = {
+    /** Create a clinical note for a patient */
+    createNote: (data) => apiFetch('/api/doctor/notes', {
+        method: 'POST',
+        body: JSON.stringify(data),
+    }),
+
+    /** Get all notes for a patient */
+    getNotes: (patientId) => apiFetch(`/api/doctor/notes/${patientId}`),
+
+    /** Delete a note */
+    deleteNote: async (noteId) => {
+        const token = getToken();
+        const headers = new Headers();
+        if (token) headers.append('Authorization', `Bearer ${token}`);
+        const response = await fetch(`${BASE_URL}/api/doctor/notes/${noteId}`, {
+            method: 'DELETE',
+            headers,
+        });
+        if (!response.ok) {
+            const body = await response.json().catch(() => ({}));
+            throw new Error(body.detail || `Delete failed: ${response.statusText}`);
+        }
+        return true;
+    },
+
+    /** Chat with Clinical LISA */
+    clinicalChat: (message, patientId) => apiFetch('/api/doctor/lisa-clinical', {
+        method: 'POST',
+        body: JSON.stringify({ message, patient_id: patientId }),
+    }),
+
+    /** Get access logs for a patient */
+    getAccessLogs: (patientId) => apiFetch(`/api/doctor/access-logs/${patientId}`),
+};

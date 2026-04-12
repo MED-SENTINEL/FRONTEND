@@ -1,4 +1,4 @@
-import { writable, get } from 'svelte/store';
+import { writable, derived, get } from 'svelte/store';
 import { apiFetch } from '../api/client';
 
 /** @type {import('svelte/store').Writable<any>} */
@@ -6,6 +6,9 @@ export const currentUser = writable(null);
 
 /** @type {import('svelte/store').Writable<boolean>} */
 export const isAuthenticated = writable(false);
+
+/** Derived store: true when the logged-in user is a doctor */
+export const isDoctor = derived(currentUser, $u => $u?.role === 'doctor');
 
 function loadStoredUser() {
     if (typeof window === 'undefined') return;
