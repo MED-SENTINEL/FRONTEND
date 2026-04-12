@@ -3,11 +3,13 @@
   import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
   import {
     MeshStandardMaterial,
+    MeshPhysicalMaterial,
     DoubleSide,
     Box3,
     Vector3,
     Raycaster,
     Vector2,
+    FrontSide,
   } from "three";
   import { isLoaded } from "../../stores/twin";
   import { isPicking, pickedPosition } from "../../stores/form";
@@ -26,23 +28,31 @@
   const raycaster = new Raycaster();
   const mouse = new Vector2();
 
+  // ─── HIGH-VISIBILITY MATERIALS ────────────────────────────────────────────
+
+  // Skeleton wireframe — bright cyan-white for maximum contrast
   const wireMat = new MeshStandardMaterial({
-    color: "#A020F0",
-    emissive: "#4C1D95",
+    color: "#22D3EE",
+    emissive: "#0891B2",
+    emissiveIntensity: 0.6,
     wireframe: true,
     transparent: true,
-    opacity: 0.3,
+    opacity: 0.7,
     side: DoubleSide,
   });
 
-  const solidMat = new MeshStandardMaterial({
-    color: "#00CCDD",
-    emissive: "#001122",
-    metalness: 0.6,
-    roughness: 0.3,
+  // Solid anatomy model — clean, translucent medical look
+  const solidMat = new MeshPhysicalMaterial({
+    color: "#A5F3FC",
+    emissive: "#155E75",
+    emissiveIntensity: 0.3,
+    metalness: 0.15,
+    roughness: 0.4,
     transparent: true,
-    opacity: 0.85,
-    side: DoubleSide,
+    opacity: 0.82,
+    side: FrontSide,
+    clearcoat: 0.3,
+    clearcoatRoughness: 0.2,
   });
 
   $: activeMat = type === "skeleton" ? wireMat : solidMat;
@@ -184,22 +194,44 @@
         position={[hoverPoint.x, hoverPoint.y, hoverPoint.z]} 
         on:click={handleGhostClick}
       >
-        <T.SphereGeometry args={[0.012, 16, 16]} />
+        <T.SphereGeometry args={[0.04, 24, 24]} />
         <T.MeshStandardMaterial 
-          color="#00CCDD" 
-          emissive="#00CCDD" 
-          emissiveIntensity={2} 
-          alphaTest={0.5}
+          color="#00E5FF" 
+          emissive="#00E5FF" 
+          emissiveIntensity={3} 
+          transparent
+          opacity={0.9}
         />
-        <T.PointLight intensity={0.5} distance={0.5} color="#00CCDD" />
+        <T.PointLight intensity={2} distance={0.6} color="#00E5FF" />
+      </T.Mesh>
+      
+      <!-- Ghost outer ring -->
+      <T.Mesh 
+        position={[hoverPoint.x, hoverPoint.y, hoverPoint.z]}
+      >
+        <T.SphereGeometry args={[0.07, 16, 16]} />
+        <T.MeshStandardMaterial 
+          color="#00E5FF" 
+          emissive="#00E5FF" 
+          emissiveIntensity={1.5} 
+          transparent
+          opacity={0.2}
+        />
       </T.Mesh>
     {/if}
 
-    <!-- Result Pin -->
+    <!-- Result Pin (after picking, before confirmation) -->
     {#if $pickedPosition}
       <T.Mesh position={[$pickedPosition.x, $pickedPosition.y, $pickedPosition.z]}>
-        <T.SphereGeometry args={[0.015]} />
-        <T.MeshBasicMaterial color="#FF0000" />
+        <T.SphereGeometry args={[0.05, 24, 24]} />
+        <T.MeshStandardMaterial 
+          color="#FF1744" 
+          emissive="#FF1744" 
+          emissiveIntensity={3} 
+          transparent
+          opacity={0.95}
+        />
+        <T.PointLight intensity={2} distance={0.5} color="#FF1744" />
       </T.Mesh>
     {/if}
   </T.Group>

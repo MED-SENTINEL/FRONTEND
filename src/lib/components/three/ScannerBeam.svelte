@@ -13,13 +13,13 @@
   });
 </script>
 
-<!-- Scanner Plane -->
+<!-- Scanner Plane — cyan to match the new color scheme -->
 <T.Mesh position={[0, y, 0]} rotation.x={Math.PI / 2}>
   <T.PlaneGeometry args={[4, 4]} />
   <T.MeshBasicMaterial
-    color="#A020F0"
+    color="#00BCD4"
     transparent
-    opacity={0.1}
+    opacity={0.08}
     side={DoubleSide}
     blending={AdditiveBlending}
   />
@@ -29,9 +29,9 @@
 <T.Mesh position={[0, y, 0]} rotation.x={Math.PI / 2}>
   <T.PlaneGeometry args={[4, 0.02]} />
   <T.MeshBasicMaterial
-    color="#A020F0"
+    color="#00E5FF"
     transparent
-    opacity={0.8}
+    opacity={0.7}
     side={DoubleSide}
     blending={AdditiveBlending}
   />

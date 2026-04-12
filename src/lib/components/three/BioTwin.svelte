@@ -7,21 +7,22 @@
     interactivity,
   } from "@threlte/extras";
   import HumanModel from "./HumanModel.svelte";
-  import ScannerBeam from "./ScannerBeam.svelte";
   import TraumaPin from "./TraumaPin.svelte";
   import { modelType, autoRotate } from "../../stores/twin";
   import { traumaPins } from "../../stores/data";
   import { isPicking } from "../../stores/form";
   import { createEventDispatcher } from "svelte";
 
-  // Enable pointer events (click, pointerenter, etc.) on 3D objects
   interactivity();
 
   const dispatch = createEventDispatcher();
 
-  // Forward pin events from HumanModel up to the parent (twin page)
   function onModelPin(event) {
     dispatch("pin", event.detail);
+  }
+
+  function onPinClick(event) {
+    dispatch("pinclick", event.detail);
   }
 </script>
 
@@ -34,18 +35,13 @@
   />
 </T.PerspectiveCamera>
 
-<T.AmbientLight color="#FFFFFF" intensity={1.5} />
-<!-- Main Front Light (Cyan) -->
-<T.DirectionalLight position={[5, 10, 5]} color="#FFFFFF" intensity={2} />
-
-<!-- Back-Left Rim Light (Magenta) -->
-<T.PointLight position={[-5, 5, -5]} color="#8B5CF6" intensity={1.5} />
-
-<!-- Back-Right Fill (Soft Blue) -->
-<T.DirectionalLight position={[5, 5, -10]} color="#88CCFF" intensity={1.5} />
-
-<!-- Underground Bounce -->
-<T.PointLight position={[0, -5, 0]} color="#F1F5F9" intensity={0.8} />
+<T.AmbientLight color="#E0F7FA" intensity={2} />
+<T.DirectionalLight position={[3, 8, 5]} color="#FFFFFF" intensity={3} />
+<T.DirectionalLight position={[-5, 5, 3]} color="#00BCD4" intensity={1.5} />
+<T.PointLight position={[-4, 4, -5]} color="#7C3AED" intensity={2} />
+<T.DirectionalLight position={[5, 3, -8]} color="#FFF8E1" intensity={1.2} />
+<T.PointLight position={[0, -3, 0]} color="#E0F7FA" intensity={1.5} />
+<T.PointLight position={[0, 0.5, 4]} color="#FFFFFF" intensity={1} />
 
 <Float speed={1} rotationIntensity={0.2} floatIntensity={0.5}>
   <HumanModel type={$modelType} on:pin={onModelPin} />
@@ -53,16 +49,16 @@
   {#each $traumaPins as pin (pin.id)}
     <TraumaPin
       position={[pin.x, pin.y, pin.z]}
-      label={pin.title || "TRAUMA_DATA"}
+      label={pin.title || pin.body_region || "TRAUMA"}
       severity={pin.severity || "medium"}
       traumaType={pin.trauma_type || "condition"}
+      description={pin.description || pin.notes || ""}
+      bodyRegion={pin.body_region || ""}
+      pinId={pin.id}
+      on:pinclick={onPinClick}
     />
   {/each}
 </Float>
-
-{#if !$isPicking}
-  <ScannerBeam />
-{/if}
 
 <ContactShadows
   scale={10}

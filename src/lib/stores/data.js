@@ -82,3 +82,14 @@ export async function deleteTraumaPin(pinId) {
         error.set(err.message);
     }
 }
+
+export async function deleteReport(reportId) {
+    try {
+        await reportsApi.delete(reportId);
+        reports.update(r => r.filter(rep => rep.id !== reportId));
+        return true;
+    } catch (err) {
+        error.set(err.message);
+        return false;
+    }
+}

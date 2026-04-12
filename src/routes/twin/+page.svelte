@@ -53,7 +53,8 @@
 </script>
 
 <div
-  class="relative w-full h-[calc(100vh-64px)] overflow-hidden bg-sentinel-bg"
+  class="relative w-full h-[calc(100vh-64px)] overflow-hidden"
+  style="background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);"
 >
   <Canvas>
     <BioTwin on:pin={onPinPicked} />
@@ -72,13 +73,14 @@
   <!-- Loading Overlay -->
   {#if !$isLoaded}
     <div
-      class="absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-md z-10"
+      class="absolute inset-0 flex items-center justify-center z-10"
+      style="background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(12px);"
     >
       <div class="space-y-6 text-center">
-        <div class="text-xl font-bold text-sentinel-optimal animate-pulse">
+        <div class="text-xl font-bold text-cyan-400 animate-pulse">
           Preparing 3D Health Model...
         </div>
-        <div class="text-xs text-sentinel-muted font-medium">
+        <div class="text-xs text-slate-400 font-medium">
           Loading anatomical data, please wait.
         </div>
       </div>
@@ -181,37 +183,37 @@
   <!-- ═══ TOP LEFT: Subject Info Panel (hidden during picking) ═══ -->
   {#if !$isPicking}
     <div class="absolute top-6 left-6 w-72 space-y-4 pointer-events-none z-20">
-      <div class="hud-panel p-5 space-y-4">
+      <div class="p-5 space-y-4 rounded-2xl border border-white/10" style="background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px);">
         <div class="flex items-center justify-between">
-          <div class="text-xs text-sentinel-dim font-bold">Patient Profile</div>
+          <div class="text-xs text-slate-400 font-bold">Patient Profile</div>
           <div class="flex items-center gap-1.5">
             <div
-              class="w-2 h-2 rounded-full bg-sentinel-optimal animate-pulse"
+              class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"
             ></div>
-            <span class="text-[10px] font-bold text-sentinel-optimal"
+            <span class="text-[10px] font-bold text-cyan-400"
               >Connected</span
             >
           </div>
         </div>
-        <div class="text-base text-sentinel-text font-bold">
+        <div class="text-base text-white font-bold">
           {$currentUser ? $currentUser.full_name : "Unknown Patient"}
         </div>
-        <div class="space-y-2.5 text-[10px] text-sentinel-muted font-medium">
-          <div class="flex justify-between border-b border-slate-100 pb-1.5">
+        <div class="space-y-2.5 text-[10px] text-slate-400 font-medium">
+          <div class="flex justify-between border-b border-white/10 pb-1.5">
             <span>Blood Type</span>
-            <span class="text-sentinel-text font-bold"
+            <span class="text-white font-bold"
               >{$currentUser?.blood_type || "N/A"}</span
             >
           </div>
-          <div class="flex justify-between border-b border-slate-100 pb-1.5">
+          <div class="flex justify-between border-b border-white/10 pb-1.5">
             <span>Model View</span>
-            <span class="text-sentinel-optimal font-bold"
+            <span class="text-cyan-400 font-bold"
               >{$modelType.replace(/_/g, " ")}</span
             >
           </div>
-          <div class="flex justify-between border-b border-slate-100 pb-1.5">
+          <div class="flex justify-between border-b border-white/10 pb-1.5">
             <span>Visual Mode</span>
-            <span class="text-sentinel-optimal font-bold"
+            <span class="text-cyan-400 font-bold"
               >{$modelType === "skeleton"
                 ? "Detailed Skeleton"
                 : "Anatomical Model"}</span
@@ -219,7 +221,7 @@
           </div>
           <div class="flex justify-between">
             <span>Analysis Resolution</span>
-            <span class="text-sentinel-optimal font-bold">High</span>
+            <span class="text-cyan-400 font-bold">High</span>
           </div>
         </div>
       </div>
@@ -232,36 +234,36 @@
       class="absolute bottom-6 left-6 right-6 flex justify-between items-end pointer-events-none z-20"
     >
       <!-- Model Selector -->
-      <div class="hud-panel p-5 pointer-events-auto bg-white/95">
-        <div class="text-xs text-sentinel-dim font-bold mb-4">
+      <div class="p-5 pointer-events-auto rounded-2xl border border-white/10" style="background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px);">
+        <div class="text-xs text-slate-400 font-bold mb-4">
           Switch Model View
         </div>
         <div class="flex gap-2">
           <button
             on:click={() => modelType.set("skeleton")}
-            class="hud-button text-[10px] {$modelType === 'skeleton'
-              ? 'bg-sentinel-optimal text-white'
-              : 'text-slate-500'}"
+            class="px-4 py-2 rounded-xl text-[10px] font-bold border transition-all {$modelType === 'skeleton'
+              ? 'bg-cyan-500 text-white border-cyan-400'
+              : 'text-slate-400 border-white/10 hover:border-cyan-400/50'}"
           >
             Skeleton
           </button>
           <button
             on:click={() =>
               modelType.set("male_skeleton_muscles_anatomy_study")}
-            class="hud-button text-[10px] {$modelType ===
+            class="px-4 py-2 rounded-xl text-[10px] font-bold border transition-all {$modelType ===
             'male_skeleton_muscles_anatomy_study'
-              ? 'bg-sentinel-optimal text-white'
-              : 'text-slate-500'}"
+              ? 'bg-cyan-500 text-white border-cyan-400'
+              : 'text-slate-400 border-white/10 hover:border-cyan-400/50'}"
           >
             Male Model
           </button>
           <button
             on:click={() =>
               modelType.set("female_skeleton_muscles_anatomy_study")}
-            class="hud-button text-[10px] {$modelType ===
+            class="px-4 py-2 rounded-xl text-[10px] font-bold border transition-all {$modelType ===
             'female_skeleton_muscles_anatomy_study'
-              ? 'bg-sentinel-optimal text-white'
-              : 'text-slate-500'}"
+              ? 'bg-cyan-500 text-white border-cyan-400'
+              : 'text-slate-400 border-white/10 hover:border-cyan-400/50'}"
           >
             Female Model
           </button>
@@ -270,12 +272,12 @@
 
       <!-- Right Controls -->
       <div class="flex gap-3 pointer-events-auto">
-        <div class="hud-panel p-3 bg-white/95">
+        <div class="p-3 rounded-2xl border border-white/10" style="background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px);">
           <button
             on:click={() => autoRotate.update((v) => !v)}
-            class="hud-button text-[10px] {$autoRotate
-              ? 'text-sentinel-optimal border-sentinel-optimal/50'
-              : 'text-slate-400'}"
+            class="px-4 py-2 rounded-xl text-[10px] font-bold border transition-all {$autoRotate
+              ? 'text-cyan-400 border-cyan-400/50'
+              : 'text-slate-500 border-white/10'}"
           >
             Auto Rotate: {$autoRotate ? "ON" : "OFF"}
           </button>

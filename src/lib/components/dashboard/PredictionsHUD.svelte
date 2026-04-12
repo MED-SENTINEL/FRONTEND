@@ -1,5 +1,5 @@
 <script>
-  import { fade, slide } from 'svelte/transition';
+  import { fade, fly } from 'svelte/transition';
   export let prediction;
 
   $: riskColor = {
@@ -13,65 +13,173 @@
     'MEDIUM': 'bg-sentinel-warning/5 border-sentinel-warning/20',
     'HIGH': 'bg-sentinel-critical/5 border-sentinel-critical/20'
   }[prediction?.risk_level] || 'bg-slate-50 border-slate-200';
+
+  $: riskGradient = {
+    'LOW': 'from-sentinel-optimal to-emerald-400',
+    'MEDIUM': 'from-sentinel-warning to-amber-400',
+    'HIGH': 'from-sentinel-critical to-red-400'
+  }[prediction?.risk_level] || 'from-slate-300 to-slate-400';
+
+  // Organ risk color based on score
+  function organColor(score) {
+    if (score >= 70) return { text: 'text-sentinel-critical', bg: 'bg-sentinel-critical', bar: 'bg-sentinel-critical' };
+    if (score >= 40) return { text: 'text-sentinel-warning', bg: 'bg-sentinel-warning', bar: 'bg-sentinel-warning' };
+    return { text: 'text-sentinel-optimal', bg: 'bg-sentinel-optimal', bar: 'bg-sentinel-optimal' };
+  }
+
+  // Organ emojis
+  const organEmoji = {
+    kidney: '🫘', cardiac: '❤️', metabolic: '🔥', liver: '🫁', blood: '🩸', thyroid: '🦋'
+  };
 </script>
 
-<div class="space-y-8">
+<div class="space-y-6">
   {#if !prediction}
     <div class="hud-panel p-12 text-center border-dashed border-slate-200 bg-white opacity-60">
       <div class="text-sm text-sentinel-dim font-medium animate-pulse">
-        Click "Update Insights" to run a health assessment.
+        Click "Run AI Analysis" to activate health intelligence agents.
       </div>
     </div>
   {:else}
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8" in:fade>
+    <!-- ═══ TOP ROW: Risk Level + Summary ═══ -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6" in:fade>
       <!-- Risk Level Card -->
-      <div class="hud-panel p-8 flex flex-col items-center justify-center text-center space-y-4 {riskBg}">
-        <div class="text-sm text-sentinel-dim font-bold">Health Assessment</div>
+      <div class="hud-panel p-6 flex flex-col items-center justify-center text-center space-y-3 {riskBg}">
+        <div class="text-[10px] text-sentinel-dim font-bold uppercase tracking-widest">Overall Risk</div>
         <div class="text-5xl font-black tracking-tight {riskColor}">
           {prediction.risk_level}
         </div>
-        <div class="w-full h-1 bg-slate-100 rounded-full overflow-hidden">
-          <div class="h-full {prediction.risk_level === 'HIGH' ? 'bg-sentinel-critical' : prediction.risk_level === 'MEDIUM' ? 'bg-sentinel-warning' : 'bg-sentinel-optimal'} transition-all duration-1000" style="width: {prediction.confidence}%"></div>
+        <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+          <div class="h-full bg-gradient-to-r {riskGradient} transition-all duration-1000 rounded-full" style="width: {prediction.confidence}%"></div>
         </div>
-        <div class="text-[10px] font-semibold text-sentinel-dim">Assessment Confidence: {prediction.confidence}%</div>
+        <div class="text-[10px] font-semibold text-sentinel-dim">Confidence: {prediction.confidence}%</div>
       </div>
 
-      <!-- Analysis Details -->
-      <div class="lg:col-span-2 space-y-6">
-        <div class="hud-panel p-6 space-y-6">
-          <div class="flex items-center justify-between border-b border-slate-200 pb-4">
-            <div class="text-sm font-bold text-sentinel-text flex items-center gap-2">
-              <svg class="w-4 h-4 text-sentinel-optimal" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-              </svg>
-              Clinical Summary
-            </div>
-            <div class="text-[10px] font-medium text-sentinel-dim">Date: {new Date().toLocaleDateString()}</div>
-          </div>
-          
-          <div class="space-y-4">
-            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
-              <div class="text-[10px] text-sentinel-dim font-bold mb-2">Recommendation</div>
-              <p class="text-[13px] text-sentinel-text leading-relaxed font-medium">
-                {prediction.recommendation}
-              </p>
-            </div>
-
-            {#if prediction.details && Object.keys(prediction.details).length > 0}
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {#each Object.entries(prediction.details) as [key, value]}
-                   {#if key !== 'recommendation'}
-                    <div class="p-3 bg-white rounded-lg border border-slate-200 flex flex-col gap-1">
-                      <span class="text-[8px] text-sentinel-dim font-bold uppercase tracking-widest">{key.replace(/_/g, ' ')}</span>
-                      <span class="text-[10px] text-sentinel-text font-mono truncate">{value}</span>
-                    </div>
-                   {/if}
-                {/each}
+      <!-- Summary + Recommendations -->
+      <div class="lg:col-span-2 hud-panel p-6 space-y-4">
+        <div class="flex items-center gap-2 border-b border-slate-200 pb-3">
+          <svg class="w-4 h-4 text-sentinel-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+          </svg>
+          <div class="text-sm font-bold text-sentinel-text">AI Assessment</div>
+          <div class="ml-auto text-[9px] font-medium text-sentinel-dim">{new Date().toLocaleDateString()}</div>
+        </div>
+        <p class="text-[13px] text-sentinel-text leading-relaxed">{prediction.recommendation}</p>
+        
+        {#if prediction.recommendations && prediction.recommendations.length > 0}
+          <div class="space-y-2 pt-2">
+            <div class="text-[10px] text-sentinel-dim font-bold uppercase tracking-widest">Recommendations</div>
+            {#each prediction.recommendations as rec, i}
+              <div class="flex items-start gap-2 text-[12px] text-sentinel-text" in:fly={{ x: -10, delay: i * 50 }}>
+                <span class="text-sentinel-optimal mt-0.5 shrink-0">✦</span>
+                <span>{rec}</span>
               </div>
-            {/if}
+            {/each}
           </div>
+        {/if}
+      </div>
+    </div>
+
+    <!-- ═══ ORGAN RISK SCORES ═══ -->
+    {#if prediction.organ_risks && Object.keys(prediction.organ_risks).length > 0}
+      <div class="space-y-3" in:fly={{ y: 15, delay: 150 }}>
+        <div class="text-xs font-bold text-sentinel-dim uppercase tracking-widest flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+          </svg>
+          Organ System Analysis
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+          {#each Object.entries(prediction.organ_risks) as [organ, data], i}
+            {@const score = typeof data === 'object' ? data.score : data}
+            {@const label = typeof data === 'object' ? data.label : (score >= 70 ? 'Concern' : score >= 40 ? 'Monitor' : 'Healthy')}
+            {@const detail = typeof data === 'object' ? data.detail : ''}
+            {@const colors = organColor(score)}
+            <div 
+              class="hud-panel p-4 flex flex-col items-center text-center space-y-2 hover:shadow-md transition-shadow group"
+              in:fly={{ y: 15, delay: 200 + i * 60 }}
+              title={detail}
+            >
+              <span class="text-xl">{organEmoji[organ] || '🏥'}</span>
+              <div class="text-[10px] font-bold text-sentinel-dim uppercase tracking-wide">{organ}</div>
+              
+              <!-- Score Ring -->
+              <div class="relative w-12 h-12">
+                <svg class="w-12 h-12 -rotate-90" viewBox="0 0 36 36">
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#e2e8f0" stroke-width="3" />
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="{score}, 100" class="{colors.text} transition-all duration-1000" />
+                </svg>
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <span class="text-xs font-black {colors.text}">{score}</span>
+                </div>
+              </div>
+              
+              <div class="text-[9px] font-bold {colors.text} uppercase">{label}</div>
+              {#if detail}
+                <div class="text-[9px] text-sentinel-dim leading-snug opacity-0 group-hover:opacity-100 transition-opacity max-w-[120px]">
+                  {detail}
+                </div>
+              {/if}
+            </div>
+          {/each}
         </div>
       </div>
+    {/if}
+
+    <!-- ═══ TRENDS + FINDINGS ═══ -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Trends -->
+      {#if prediction.trends && prediction.trends.length > 0}
+        <div class="hud-panel p-6 space-y-3" in:fly={{ y: 15, delay: 300 }}>
+          <div class="text-xs font-bold text-sentinel-dim uppercase tracking-widest flex items-center gap-2">
+            <svg class="w-4 h-4 text-sentinel-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+            </svg>
+            Detected Trends
+          </div>
+          <div class="space-y-2.5">
+            {#each prediction.trends as trend, i}
+              <div class="flex items-start gap-2.5 p-2.5 rounded-lg bg-slate-50 border border-slate-100" in:fly={{ x: -10, delay: 350 + i * 60 }}>
+                <span class="text-sentinel-accent text-xs mt-0.5 shrink-0">📈</span>
+                <span class="text-[12px] text-sentinel-text leading-relaxed">{trend}</span>
+              </div>
+            {/each}
+          </div>
+        </div>
+      {/if}
+
+      <!-- Key Findings -->
+      {#if prediction.key_findings && prediction.key_findings.length > 0}
+        <div class="hud-panel p-6 space-y-3" in:fly={{ y: 15, delay: 350 }}>
+          <div class="text-xs font-bold text-sentinel-dim uppercase tracking-widest flex items-center gap-2">
+            <svg class="w-4 h-4 text-sentinel-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Key Findings
+          </div>
+          <div class="space-y-2.5">
+            {#each prediction.key_findings as finding, i}
+              {@const fSeverity = finding.severity || 'info'}
+              <div 
+                class="flex items-start gap-2.5 p-2.5 rounded-lg border {
+                  fSeverity === 'critical' ? 'bg-sentinel-critical/5 border-sentinel-critical/20' :
+                  fSeverity === 'warning' ? 'bg-sentinel-warning/5 border-sentinel-warning/20' :
+                  'bg-slate-50 border-slate-100'
+                }"
+                in:fly={{ x: -10, delay: 400 + i * 60 }}
+              >
+                <span class="text-xs mt-0.5 shrink-0">{fSeverity === 'critical' ? '🔴' : fSeverity === 'warning' ? '🟡' : '🟢'}</span>
+                <div>
+                  <div class="text-[12px] font-semibold text-sentinel-text">{finding.finding}</div>
+                  {#if finding.detail}
+                    <div class="text-[11px] text-sentinel-dim mt-0.5">{finding.detail}</div>
+                  {/if}
+                </div>
+              </div>
+            {/each}
+          </div>
+        </div>
+      {/if}
     </div>
   {/if}
 </div>

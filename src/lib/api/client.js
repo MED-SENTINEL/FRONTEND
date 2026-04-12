@@ -77,6 +77,20 @@ export const reportsApi = {
             body: formData,
         });
     },
+    delete: async (reportId) => {
+        const token = getToken();
+        const headers = new Headers();
+        if (token) headers.append('Authorization', `Bearer ${token}`);
+        const response = await fetch(`${BASE_URL}/api/reports/${reportId}`, {
+            method: 'DELETE',
+            headers,
+        });
+        if (!response.ok) {
+            const body = await response.json().catch(() => ({}));
+            throw new Error(body.detail || `Delete failed: ${response.statusText}`);
+        }
+        return true;
+    },
     getFile: async (reportId) => {
         const token = getToken();
         const headers = new Headers();
@@ -112,4 +126,53 @@ export const shareApi = {
     getFileUrl: (shareKey, passcode, reportId) => {
         return `${BASE_URL}/api/share/validate/${shareKey}/file/${reportId}?passcode=${passcode}`;
     }
+};
+
+
+export const aiApi = {
+    /** Run OCR + anomaly detection on a specific report */
+    analyze: (reportId) => apiFetch(`/api/ai/analyze/${reportId}`, { method: 'POST' }),
+    
+    /** Get comprehensive health insights for a patient */
+    insights: (patientId) => apiFetch(`/api/ai/insights/${patientId}`, { method: 'POST' }),
+    
+    /** Chat with LISA AI assistant */
+    chat: (message) => apiFetch('/api/ai/chat', { 
+        method: 'POST', 
+        body: JSON.stringify({ message }) 
+    }),
+    
+    /** Get all past AI analyses for a patient */
+    history: (patientId, type = null) => {
+        const query = type ? `?analysis_type=${type}` : '';
+        return apiFetch(`/api/ai/history/${patientId}${query}`);
+    }
+};
+
+
+export const bloodworkApi = {
+    /** List all bloodwork entries for a patient */
+    list: (patientId) => apiFetch(`/api/bloodwork/${patientId}`),
+    
+    /** Create a new bloodwork entry */
+    create: (data) => apiFetch('/api/bloodwork/', {
+        method: 'POST',
+        body: JSON.stringify(data),
+    }),
+    
+    /** Delete a bloodwork entry */
+    delete: async (entryId) => {
+        const token = getToken();
+        const headers = new Headers();
+        if (token) headers.append('Authorization', `Bearer ${token}`);
+        const response = await fetch(`${BASE_URL}/api/bloodwork/${entryId}`, {
+            method: 'DELETE',
+            headers,
+        });
+        if (!response.ok) {
+            const body = await response.json().catch(() => ({}));
+            throw new Error(body.detail || `Delete failed: ${response.statusText}`);
+        }
+        return true;
+    },
 };
