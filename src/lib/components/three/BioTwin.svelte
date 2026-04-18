@@ -12,10 +12,18 @@
   import { traumaPins } from "../../stores/data";
   import { isPicking } from "../../stores/form";
   import { createEventDispatcher } from "svelte";
+  import { useThrelte } from "@threlte/core";
+  import { Raycaster, Vector3, Plane, Vector2 } from "three";
+  import { onMount, onDestroy } from "svelte";
 
   interactivity();
 
   const dispatch = createEventDispatcher();
+  const { camera, renderer } = useThrelte();
+  
+  let controls;
+  const raycaster = new Raycaster();
+  const mouse = new Vector2();
 
   function onModelPin(event) {
     dispatch("pin", event.detail);
@@ -24,10 +32,55 @@
   function onPinClick(event) {
     dispatch("pinclick", event.detail);
   }
+
+  function handleWheel(event) {
+    // Only zoom to cursor if scrolling directly over the 3D canvas
+    if (!controls || !$camera || !renderer) return;
+    const domElement = renderer.domElement;
+    if (event.target !== domElement && !domElement.contains(event.target)) return;
+
+    // Calculate Normalized Device Coordinates (-1 to 1) from mouse wheel event
+    const rect = domElement.getBoundingClientRect();
+    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+    // Calculate focal point on the plane of the current target
+    raycaster.setFromCamera(mouse, $camera);
+    const cameraDir = new Vector3();
+    $camera.getWorldDirection(cameraDir);
+    const focalPlane = new Plane().setFromNormalAndCoplanarPoint(cameraDir, controls.target);
+    
+    const hitPoint = new Vector3();
+    raycaster.ray.intersectPlane(focalPlane, hitPoint);
+
+    if (hitPoint) {
+      // Zoom step multiplier (15% per tick)
+      const zoomIn = event.deltaY < 0;
+      const factor = zoomIn ? 0.85 : 1.15;
+
+      // Scale both camera position and target around the mouse hover point!
+      $camera.position.sub(hitPoint).multiplyScalar(factor).add(hitPoint);
+      controls.target.sub(hitPoint).multiplyScalar(factor).add(hitPoint);
+      
+      controls.update();
+    }
+  }
+
+  onMount(() => {
+    // Passive false allows us to potentially prevent default if we wanted, 
+    // but OrbitControls doesn't need preventDefault if we disabled its zoom.
+    window.addEventListener("wheel", handleWheel, { passive: false });
+  });
+
+  onDestroy(() => {
+    window.removeEventListener("wheel", handleWheel);
+  });
 </script>
 
 <T.PerspectiveCamera makeDefault position={[0, 1.5, 5]} fov={45}>
   <OrbitControls
+    bind:ref={controls}
+    enableZoom={false}
     enableDamping
     target={[0, 1, 0]}
     autoRotate={$autoRotate}

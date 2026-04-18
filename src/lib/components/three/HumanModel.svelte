@@ -20,7 +20,7 @@
 
   let model = null;
   let loadError = false;
-  
+
   // Real-time hover state for visual feedback
   let hoverPoint = null;
 
@@ -98,7 +98,7 @@
     if (!threlteCanvas || !model || !$camera) return null;
 
     const rect = threlteCanvas.getBoundingClientRect();
-    
+
     // Convert mouse to Normalized Device Coordinates (-1 to +1)
     mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
     mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
@@ -118,7 +118,7 @@
   function markLocation(point) {
     if (!point) return;
     console.log(`[HumanModel] Marking selection at:`, point);
-    
+
     // Write to both event AND store to ensure UI catches it
     $pickedPosition = { x: point.x, y: point.y, z: point.z };
     dispatch("pin", { x: point.x, y: point.y, z: point.z });
@@ -148,7 +148,7 @@
   }
 
   // --- NATIVE INTERACTION FALLBACK ---
-  // In case double-click is failing on your device, we also support 
+  // In case double-click is failing on your device, we also support
   // clicking the "Preview Dot" itself if it appears.
   function handleGhostClick() {
     if (hoverPoint) markLocation(hoverPoint);
@@ -184,36 +184,34 @@
 {#if model}
   <T.Group>
     <T is={model} />
-    
+
     <!-- ═══ THE "GHOST PIN" (Other Way) ═══ -->
     <!-- This dot follows your mouse across the skin. 
          If you see this dot, it means picking is working! 
          You can successfully click or double-click to lock it in. -->
     {#if $isPicking && hoverPoint}
-      <T.Mesh 
-        position={[hoverPoint.x, hoverPoint.y, hoverPoint.z]} 
+      <T.Mesh
+        position={[hoverPoint.x, hoverPoint.y, hoverPoint.z]}
         on:click={handleGhostClick}
       >
         <T.SphereGeometry args={[0.04, 24, 24]} />
-        <T.MeshStandardMaterial 
-          color="#00E5FF" 
-          emissive="#00E5FF" 
-          emissiveIntensity={3} 
+        <T.MeshStandardMaterial
+          color="#00E5FF"
+          emissive="#00E5FF"
+          emissiveIntensity={3}
           transparent
           opacity={0.9}
         />
         <T.PointLight intensity={2} distance={0.6} color="#00E5FF" />
       </T.Mesh>
-      
+
       <!-- Ghost outer ring -->
-      <T.Mesh 
-        position={[hoverPoint.x, hoverPoint.y, hoverPoint.z]}
-      >
+      <T.Mesh position={[hoverPoint.x, hoverPoint.y, hoverPoint.z]}>
         <T.SphereGeometry args={[0.07, 16, 16]} />
-        <T.MeshStandardMaterial 
-          color="#00E5FF" 
-          emissive="#00E5FF" 
-          emissiveIntensity={1.5} 
+        <T.MeshStandardMaterial
+          color="#00E5FF"
+          emissive="#00E5FF"
+          emissiveIntensity={1.5}
           transparent
           opacity={0.2}
         />
@@ -222,12 +220,14 @@
 
     <!-- Result Pin (after picking, before confirmation) -->
     {#if $pickedPosition}
-      <T.Mesh position={[$pickedPosition.x, $pickedPosition.y, $pickedPosition.z]}>
+      <T.Mesh
+        position={[$pickedPosition.x, $pickedPosition.y, $pickedPosition.z]}
+      >
         <T.SphereGeometry args={[0.05, 24, 24]} />
-        <T.MeshStandardMaterial 
-          color="#FF1744" 
-          emissive="#FF1744" 
-          emissiveIntensity={3} 
+        <T.MeshStandardMaterial
+          color="#FF1744"
+          emissive="#FF1744"
+          emissiveIntensity={3}
           transparent
           opacity={0.95}
         />
