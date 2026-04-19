@@ -10,18 +10,18 @@
   import DoctorSidebar from '$lib/components/layout/DoctorSidebar.svelte';
   import DoctorHeader from '$lib/components/layout/DoctorHeader.svelte';
 
-  const publicRoutes = ['/login', '/register', '/verify', '/onboarding', '/auth/google/callback'];
+  const publicRoutes = ['/landing', '/login', '/register', '/verify', '/onboarding', '/auth/google/callback'];
   
   $: isPublicRoute = publicRoutes.includes($page.url.pathname);
 
   onMount(() => {
     if (!$isAuthenticated && !isPublicRoute) {
-      goto('/login');
+      goto('/landing');
     }
   });
 
   $: if (typeof window !== 'undefined' && !$isAuthenticated && !isPublicRoute) {
-    goto('/login');
+    goto('/landing');
   }
 
   // Redirect doctors to /doctor if they land on patient root
