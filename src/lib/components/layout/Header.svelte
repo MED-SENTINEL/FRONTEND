@@ -55,20 +55,5 @@
         {currentTime.toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }).replace(/:/g, ' ')}
       </div>
     </div>
-
-    <!-- Status Badge -->
-    <div class="flex items-center gap-3 px-4 py-2 rounded-xl bg-slate-50 border border-slate-200 shadow-inner">
-      <div class="relative flex h-2 w-2">
-        {#if !bootDone}
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sentinel-optimal opacity-75"></span>
-        {/if}
-        <span class="relative inline-flex rounded-full h-2 w-2 {bootDone ? 'bg-sentinel-optimal' : 'bg-sentinel-muted'}"></span>
-      </div>
-      <div class="flex flex-col">
-        <span class="text-[10px] font-semibold leading-none {bootDone ? 'text-sentinel-text' : 'text-sentinel-dim'} transition-colors">
-          {bootDone ? 'System Ready' : 'Connecting...'}
-        </span>
-      </div>
-    </div>
   </div>
 </header>
