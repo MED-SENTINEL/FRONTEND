@@ -63,7 +63,7 @@
     switch (type) {
       case 'report': return 'text-sentinel-optimal border-sentinel-optimal/30 bg-sentinel-optimal/5';
       case 'trauma': return 'text-sentinel-critical border-sentinel-critical/30 bg-sentinel-critical/5';
-      default: return 'text-sentinel-dim border-white/5 bg-white/5';
+      default: return 'text-sentinel-dim dark:text-slate-400 border-white/5 bg-white dark:bg-sentinel-dark-surface-0/5';
     }
   }
 
@@ -77,18 +77,18 @@
 </script>
 
 <div class="space-y-12">
-  <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-slate-200 pb-10" in:fade>
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-slate-200 dark:border-slate-700 pb-10" in:fade>
     <div class="space-y-2">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-2">
-        <svg class="w-3 h-3 text-sentinel-dim" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sentinel-optimal/5 border border-sentinel-optimal/20 mb-2">
+        <svg class="w-3 h-3 text-sentinel-dim dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <span class="text-xs font-semibold text-sentinel-dim">Activity Log Active</span>
+        <span class="text-xs font-semibold text-sentinel-dim dark:text-slate-400">Activity Log Active</span>
       </div>
-      <h1 class="text-4xl font-bold tracking-tight text-sentinel-text leading-tight">
-        Activity <span class="text-sentinel-text italic font-bold opacity-30">Log</span>
+      <h1 class="text-4xl font-bold tracking-tight text-sentinel-text dark:text-white leading-tight">
+        Activity <span class="text-sentinel-text dark:text-white italic font-bold opacity-30">Log</span>
       </h1>
-      <div class="text-sm text-sentinel-dim font-medium">A complete record of your health interactions and data uploads.</div>
+      <div class="text-sm text-sentinel-dim dark:text-slate-400 font-medium">A complete record of your health interactions and data uploads.</div>
     </div>
   </div>
 
@@ -99,25 +99,25 @@
     {#if loading}
       <div class="ml-24 p-12 hud-panel flex flex-col items-center justify-center space-y-4">
         <div class="w-8 h-8 rounded-full border-2 border-sentinel-optimal/20 border-t-sentinel-optimal animate-spin"></div>
-        <div class="text-xs text-sentinel-dim animate-pulse font-medium">Loading activity...</div>
+        <div class="text-xs text-sentinel-dim dark:text-slate-400 animate-pulse font-medium">Loading activity...</div>
       </div>
     {:else if events.length === 0}
-      <div class="ml-24 p-20 text-center hud-panel border-dashed border-slate-200 bg-white opacity-40 rounded-3xl" in:fade>
-        <div class="text-sm text-sentinel-dim font-bold">No activity found</div>
+      <div class="ml-24 p-20 text-center hud-panel border-dashed border-slate-200 dark:border-slate-700 bg-white dark:bg-sentinel-dark-surface-0 opacity-40 rounded-3xl" in:fade>
+        <div class="text-sm text-sentinel-dim dark:text-slate-400 font-bold">No activity found</div>
       </div>
     {:else}
       <div class="space-y-10 pb-20">
         {#each events as event, i}
           <div class="relative flex items-start group" in:fly={{ x: -20, delay: i * 100 }}>
             <!-- Temporal Marker (Active Dot) -->
-            <div class="absolute left-[39.5px] top-8 -translate-x-1/2 w-4 h-4 rounded-full bg-white border-2 border-slate-200 flex items-center justify-center z-20 group-hover:scale-125 transition-transform duration-500">
+            <div class="absolute left-[39.5px] top-8 -translate-x-1/2 w-4 h-4 rounded-full bg-white dark:bg-sentinel-dark-surface-0 border-2 border-slate-200 dark:border-slate-700 flex items-center justify-center z-20 group-hover:scale-125 transition-transform duration-500">
                <div class="w-1.5 h-1.5 rounded-full {getIndicatorColor(event.type)}"></div>
             </div>
             
             <!-- Event Card -->
-            <div class="ml-24 flex-1 hud-panel p-6 bg-white border-slate-200 group-hover:border-sentinel-optimal/30 transition-all duration-500 relative">
+            <div class="ml-24 flex-1 hud-panel p-6 bg-white dark:bg-sentinel-dark-surface-0 border-slate-200 dark:border-slate-700 group-hover:border-sentinel-optimal/30 transition-all duration-500 relative">
                <!-- Corner Accent -->
-               <div class="absolute top-0 right-0 w-8 h-8 border-t border-r border-slate-200 group-hover:border-sentinel-optimal/40 transition-colors rounded-tr-xl"></div>
+               <div class="absolute top-0 right-0 w-8 h-8 border-t border-r border-slate-200 dark:border-slate-700 group-hover:border-sentinel-optimal/40 transition-colors rounded-tr-xl"></div>
                
                <div class="flex flex-col md:flex-row justify-between items-start gap-6">
                 <div class="flex items-center gap-5">
@@ -127,14 +127,14 @@
                     </svg>
                   </div>
                   <div class="space-y-1">
-                    <div class="text-[10px] text-sentinel-dim font-bold block mb-1">{event.type.replace('_', ' ')}</div>
-                    <div class="text-lg font-bold text-sentinel-text tracking-tight group-hover:text-sentinel-optimal transition-colors">{event.title}</div>
+                    <div class="text-[10px] text-sentinel-dim dark:text-slate-400 font-bold block mb-1">{event.type.replace('_', ' ')}</div>
+                    <div class="text-lg font-bold text-sentinel-text dark:text-white tracking-tight group-hover:text-sentinel-optimal transition-colors">{event.title}</div>
                   </div>
                 </div>
                 
                 <div class="text-left md:text-right space-y-1">
-                  <div class="text-[10px] text-sentinel-dim font-bold">Date & Time</div>
-                  <div class="text-xs font-mono text-sentinel-text flex flex-col md:items-end gap-0.5">
+                  <div class="text-[10px] text-sentinel-dim dark:text-slate-400 font-bold">Date & Time</div>
+                  <div class="text-xs font-mono text-sentinel-text dark:text-white flex flex-col md:items-end gap-0.5">
                     <span class="font-bold">{new Date(event.date).toLocaleDateString()}</span>
                     <span class="text-[10px] hud-text-optimal opacity-80">{new Date(event.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'}).replace(/:/g, ' ')}</span>
                   </div>
@@ -142,8 +142,8 @@
               </div>
 
               {#if event.summary}
-                <div class="mt-6 pt-6 border-t border-slate-100" in:slide>
-                  <div class="text-xs text-sentinel-muted leading-relaxed font-medium bg-slate-50 p-4 rounded-xl border border-slate-200 group-hover:bg-sentinel-optimal/5 group-hover:border-sentinel-optimal/10 transition-all">
+                <div class="mt-6 pt-6 border-t border-slate-100 dark:border-slate-700/50" in:slide>
+                  <div class="text-xs text-sentinel-muted dark:text-slate-400 leading-relaxed font-medium bg-slate-50 dark:bg-sentinel-dark-surface-1 p-4 rounded-xl border border-slate-200 dark:border-slate-700 group-hover:bg-sentinel-optimal/5 group-hover:border-sentinel-optimal/10 transition-all">
                     {event.summary}
                   </div>
                 </div>

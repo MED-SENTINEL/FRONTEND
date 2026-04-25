@@ -3,7 +3,7 @@
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   import { fade, fly } from 'svelte/transition';
-  import { onMount } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
 
   let email = '';
   let code = '';
@@ -25,7 +25,6 @@
     submitting = true;
     try {
       const response = await verifyEmail(email, code);
-      // If user is not onboarded, go to onboarding
       if (!response.user.is_onboarded) {
         goto('/onboarding');
       } else {
@@ -45,7 +44,6 @@
     try {
       await resendCode(email);
       successMsg = 'New verification code sent!';
-      // Start 60s cooldown
       cooldown = 60;
       cooldownInterval = setInterval(() => {
         cooldown--;
@@ -60,11 +58,15 @@
       resending = false;
     }
   }
+
+  onDestroy(() => {
+    if (cooldownInterval) clearInterval(cooldownInterval);
+  });
 </script>
 
-<div class="min-h-screen flex items-center justify-center bg-sentinel-bg relative overflow-hidden p-6 selection:bg-sentinel-optimal/10">
+<div class="min-h-screen flex items-center justify-center bg-sentinel-bg dark:bg-sentinel-dark-bg relative overflow-hidden p-6 selection:bg-sentinel-optimal/10">
   <!-- Background Grid -->
-  <div class="absolute inset-0 opacity-40 pointer-events-none"
+  <div class="absolute inset-0 opacity-40 dark:opacity-20 pointer-events-none"
        style="background-image: radial-gradient(circle at 2px 2px, rgba(8, 145, 178, 0.1) 1px, transparent 0); background-size: 40px 40px;"></div>
   <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(8,145,178,0.03)_0%,transparent_70%)] pointer-events-none"></div>
 
@@ -72,20 +74,20 @@
     <!-- Header -->
     <div class="text-center mb-10 space-y-4">
       <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-sentinel-optimal to-sentinel-optimal/20 shadow-[0_0_30px_rgba(6,182,212,0.3)] mb-4">
-        <svg class="w-10 h-10 text-sentinel-bg" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
         </svg>
       </div>
-      <h1 class="text-3xl font-bold tracking-tight text-sentinel-text">Verify Email</h1>
+      <h1 class="text-3xl font-bold tracking-tight text-sentinel-text dark:text-white">Verify Email</h1>
       <div class="h-px w-12 bg-sentinel-optimal/40 mx-auto"></div>
-      <div class="text-xs text-sentinel-muted font-medium">Please enter the verification code sent to your email.</div>
+      <div class="text-xs text-sentinel-muted dark:text-slate-400 font-medium">Please enter the verification code sent to your email.</div>
     </div>
 
     <!-- Verify Card -->
-    <div class="hud-panel p-8 bg-white/50 border-slate-200 shadow-2xl space-y-8">
-      <div class="text-sm font-bold text-sentinel-text border-b border-slate-200 pb-4 text-center">Enter Code</div>
+    <div class="hud-panel p-8 bg-white/50 dark:bg-sentinel-dark-surface-0/80 border-slate-200 dark:border-slate-700 shadow-2xl space-y-8">
+      <div class="text-sm font-bold text-sentinel-text dark:text-white border-b border-slate-200 dark:border-slate-700 pb-4 text-center">Enter Code</div>
 
-      <div class="text-center text-xs text-sentinel-muted leading-relaxed px-2 font-medium">
+      <div class="text-center text-xs text-sentinel-muted dark:text-slate-400 leading-relaxed px-2 font-medium">
         A 6-digit code has been sent to<br />
         <span class="text-sentinel-optimal font-bold">{email || 'your email'}</span>
       </div>
@@ -104,7 +106,7 @@
 
       <form on:submit|preventDefault={handleVerify} class="space-y-6">
         <div class="space-y-2">
-          <label for="code" class="text-[11px] text-sentinel-dim font-bold px-1 text-center block">Verification Code</label>
+          <label for="code" class="text-[11px] text-sentinel-dim dark:text-slate-400 font-bold px-1 text-center block">Verification Code</label>
           <input
             id="code"
             type="text"
@@ -119,7 +121,7 @@
 
         {#if !email}
           <div class="space-y-2">
-            <label for="verify-email" class="text-[11px] text-sentinel-dim font-bold px-1">Email Address</label>
+            <label for="verify-email" class="text-[11px] text-sentinel-dim dark:text-slate-400 font-bold px-1">Email Address</label>
             <input
               id="verify-email"
               type="email"
@@ -134,13 +136,13 @@
         <button
           type="submit"
           disabled={submitting || code.length !== 6}
-          class="w-full hud-button py-3.5 text-xs tracking-[0.3em]"
+          class="w-full hud-button hud-button-accent py-3.5 text-xs tracking-[0.3em]"
         >
           {submitting ? 'Verifying...' : 'Verify Account'}
         </button>
       </form>
 
-      <div class="pt-6 border-t border-slate-200 flex flex-col items-center gap-4">
+      <div class="pt-6 border-t border-slate-200 dark:border-slate-700 flex flex-col items-center gap-4">
         <button
           on:click={handleResend}
           disabled={resending || cooldown > 0}
@@ -155,14 +157,14 @@
           {/if}
         </button>
 
-        <a href="/login" class="text-xs text-sentinel-dim font-semibold hover:text-sentinel-optimal transition-colors">
+        <a href="/login" class="text-xs text-sentinel-dim dark:text-slate-400 font-semibold hover:text-sentinel-optimal transition-colors">
           ← Back to Login
         </a>
       </div>
     </div>
 
     <!-- Footer -->
-    <div class="mt-8 text-center text-[10px] text-sentinel-dim/40 font-medium tracking-widest">
+    <div class="mt-8 text-center text-[10px] text-sentinel-dim/40 dark:text-slate-600 font-medium tracking-widest">
       Professional Medical Environment
     </div>
   </div>

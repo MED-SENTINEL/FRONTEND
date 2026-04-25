@@ -12,6 +12,12 @@
   import { traumaPins } from "../../stores/data";
   import { isPicking } from "../../stores/form";
   import { createEventDispatcher } from "svelte";
+
+  /** @type {Array|null} Optional filtered pins from parent (for time-travel slider) */
+  export let filterPins = null;
+
+  // Use filterPins if provided, otherwise fallback to store
+  $: displayPins = filterPins || $traumaPins || [];
   import { useThrelte } from "@threlte/core";
   import { Raycaster, Vector3, Plane, Vector2 } from "three";
   import { onMount, onDestroy } from "svelte";
@@ -99,7 +105,7 @@
 <Float speed={1} rotationIntensity={0.2} floatIntensity={0.5}>
   <HumanModel type={$modelType} on:pin={onModelPin} />
 
-  {#each $traumaPins as pin (pin.id)}
+  {#each displayPins as pin (pin.id)}
     <TraumaPin
       position={[pin.x, pin.y, pin.z]}
       label={pin.title || pin.body_region || "TRAUMA"}

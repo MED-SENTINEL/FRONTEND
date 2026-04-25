@@ -5,27 +5,25 @@
 
 @layer base {
   body {
-    @apply bg-sentinel-bg text-sentinel-text font-sans selection:bg-sentinel-optimal/10 selection:text-sentinel-optimal;
+    @apply bg-sentinel-bg dark:bg-sentinel-dark-bg text-sentinel-text dark:text-slate-100 font-sans selection:bg-sentinel-optimal/10 selection:text-sentinel-optimal;
     margin: 0;
     overflow-x: hidden;
-    /* Clean, soft background */
-    background-color: #f8fafc;
   }
 }
 
 @layer components {
   /* Soft Medical Panel */
   .hud-panel {
-    @apply bg-white border border-slate-200 rounded-2xl shadow-sm transition-all duration-300 relative overflow-hidden;
+    @apply bg-white dark:bg-sentinel-dark-surface-0 border border-slate-200 dark:border-slate-700/60 rounded-2xl shadow-sm transition-all duration-300 relative overflow-hidden;
   }
   
   .hud-panel:hover {
-    @apply border-sentinel-optimal/20 shadow-md;
+    @apply border-sentinel-optimal/20 dark:border-sentinel-optimal/30 shadow-md;
   }
   
   /* Friendly Action Buttons */
   .hud-button {
-    @apply relative flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-semibold transition-all duration-300 hover:bg-slate-50 hover:border-sentinel-optimal/50 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none text-slate-700;
+    @apply relative flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-sentinel-dark-surface-1 text-sm font-semibold transition-all duration-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-sentinel-optimal/50 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none text-slate-700 dark:text-slate-200;
   }
 
   .hud-button-accent {
@@ -34,12 +32,12 @@
 
   /* Refined Contextual text states */
   .hud-text-optimal { @apply text-sentinel-optimal; }
-  .hud-text-warning { @apply text-sentinel-warning; }
-  .hud-text-critical { @apply text-sentinel-critical; }
+  .hud-text-warning { @apply text-sentinel-warning dark:text-amber-400; }
+  .hud-text-critical { @apply text-sentinel-critical dark:text-red-400; }
 
   /* Premium Form Inputs */
   .hud-input {
-    @apply w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-sentinel-text placeholder:text-slate-400 focus:outline-none focus:border-sentinel-optimal/50 focus:ring-4 focus:ring-sentinel-optimal/5 transition-all duration-200;
+    @apply w-full bg-slate-50 dark:bg-sentinel-dark-surface-1 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 text-sm text-sentinel-text dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-sentinel-optimal/50 dark:focus:border-sentinel-optimal/60 focus:ring-4 focus:ring-sentinel-optimal/5 dark:focus:ring-sentinel-optimal/10 transition-all duration-200;
   }
 }
 
@@ -60,4 +58,4 @@
 
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { @apply bg-transparent; }
-::-webkit-scrollbar-thumb { @apply bg-slate-200 rounded-full hover:bg-sentinel-optimal/50 transition-colors; }
+::-webkit-scrollbar-thumb { @apply bg-slate-200 dark:bg-slate-700 rounded-full hover:bg-sentinel-optimal/50 transition-colors; }

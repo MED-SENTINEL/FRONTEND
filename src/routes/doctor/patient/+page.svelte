@@ -90,7 +90,7 @@
       case 'diagnosis': return 'bg-red-50 text-red-700 border-red-200';
       case 'follow_up': return 'bg-amber-50 text-amber-700 border-amber-200';
       case 'prescription': return 'bg-blue-50 text-blue-700 border-blue-200';
-      default: return 'bg-slate-50 text-slate-600 border-slate-200';
+      default: return 'bg-slate-50 dark:bg-sentinel-dark-surface-1 text-slate-600 border-slate-200 dark:border-slate-700';
     }
   }
 
@@ -116,25 +116,25 @@
   {#if revalidating}
     <div class="p-12 text-center">
       <div class="w-8 h-8 border-2 border-emerald-200 border-t-emerald-600 rounded-full animate-spin mx-auto mb-3"></div>
-      <div class="text-sm text-slate-400">Loading patient data...</div>
+      <div class="text-sm text-slate-400 dark:text-slate-500">Loading patient data...</div>
     </div>
   {:else if !$activePatient}
-    <div class="p-16 rounded-2xl border-2 border-dashed border-slate-200 text-center bg-white">
-      <div class="text-sm font-semibold text-slate-500 mb-2">No patient selected</div>
+    <div class="p-16 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700 text-center bg-white dark:bg-sentinel-dark-surface-0">
+      <div class="text-sm font-semibold text-slate-500 dark:text-slate-400 dark:text-slate-500 mb-2">No patient selected</div>
       <a href="/doctor/access" class="text-xs text-emerald-600 font-bold hover:underline">
         Access a patient to begin →
       </a>
     </div>
   {:else}
     <!-- Session Switcher + Patient Header -->
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-200 pb-6" in:fade>
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-200 dark:border-slate-700 pb-6" in:fade>
       <div class="flex items-center gap-4">
         <div class="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-sm font-bold text-blue-700">
           {$activePatient.patient_profile?.full_name?.substring(0, 2).toUpperCase() || 'PT'}
         </div>
         <div>
-          <h1 class="text-xl font-bold text-slate-800">{$activePatient.patient_profile?.full_name || 'Patient'}</h1>
-          <div class="text-xs text-slate-400">
+          <h1 class="text-xl font-bold text-slate-800 dark:text-white">{$activePatient.patient_profile?.full_name || 'Patient'}</h1>
+          <div class="text-xs text-slate-400 dark:text-slate-500">
             {$activePatient.patient_profile?.gender || ''} · {$activePatient.patient_profile?.blood_type || 'Unknown blood type'} · {$activePatient.permissions} access
           </div>
         </div>
@@ -143,7 +143,7 @@
       {#if $doctorSessions.length > 1}
         <select
           on:change={(e) => handleSessionSwitch(e.target.value)}
-          class="text-xs border border-slate-200 rounded-lg px-3 py-2 bg-white focus:outline-none focus:border-emerald-300"
+          class="text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 bg-white dark:bg-sentinel-dark-surface-0 focus:outline-none focus:border-emerald-300"
         >
           {#each $doctorSessions as session}
             <option value={session.shareKey} selected={session.shareKey === $activeShareKey}>
@@ -155,12 +155,12 @@
     </div>
 
     <!-- Tab Navigation -->
-    <div class="flex gap-1 p-1 bg-white rounded-xl border border-slate-200 overflow-x-auto">
+    <div class="flex gap-1 p-1 bg-white dark:bg-sentinel-dark-surface-0 rounded-xl border border-slate-200 dark:border-slate-700 overflow-x-auto">
       {#each tabs as tab}
         <button
           on:click={() => activeTab = tab.id}
           class="px-4 py-2.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap
-            {activeTab === tab.id ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'text-slate-400 hover:text-slate-600 border border-transparent'}"
+            {activeTab === tab.id ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 border border-transparent'}"
         >
           {tab.label}
         </button>
@@ -170,8 +170,8 @@
     <!-- ═══ TAB: OVERVIEW ═══ -->
     {#if activeTab === 'overview'}
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" in:fade>
-        <div class="p-6 rounded-2xl bg-white border border-slate-200 space-y-4">
-          <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Patient Profile</div>
+        <div class="p-6 rounded-2xl bg-white dark:bg-sentinel-dark-surface-0 border border-slate-200 dark:border-slate-700 space-y-4">
+          <div class="text-xs font-bold text-slate-500 dark:text-slate-400 dark:text-slate-500 uppercase tracking-wider">Patient Profile</div>
           <div class="grid grid-cols-2 gap-4">
             {#each [
               ['Full Name', $activePatient.patient_profile?.full_name],
@@ -182,42 +182,42 @@
               ['Weight', $activePatient.patient_profile?.weight_kg ? `${$activePatient.patient_profile.weight_kg} kg` : null],
             ] as [label, value]}
               <div class="space-y-0.5">
-                <span class="text-[10px] text-slate-400 font-bold block uppercase">{label}</span>
-                <span class="text-sm font-semibold text-slate-700">{value || 'N/A'}</span>
+                <span class="text-[10px] text-slate-400 dark:text-slate-500 font-bold block uppercase">{label}</span>
+                <span class="text-sm font-semibold text-slate-700 dark:text-slate-200">{value || 'N/A'}</span>
               </div>
             {/each}
           </div>
           {#if $activePatient.patient_profile?.allergies}
-            <div class="pt-3 border-t border-slate-100">
+            <div class="pt-3 border-t border-slate-100 dark:border-slate-700/50">
               <span class="text-[10px] text-red-600 font-bold block uppercase">Allergies</span>
-              <span class="text-xs text-slate-700">{$activePatient.patient_profile.allergies}</span>
+              <span class="text-xs text-slate-700 dark:text-slate-200">{$activePatient.patient_profile.allergies}</span>
             </div>
           {/if}
           {#if $activePatient.patient_profile?.chronic_conditions}
             <div>
               <span class="text-[10px] text-amber-600 font-bold block uppercase">Chronic Conditions</span>
-              <span class="text-xs text-slate-700">{$activePatient.patient_profile.chronic_conditions}</span>
+              <span class="text-xs text-slate-700 dark:text-slate-200">{$activePatient.patient_profile.chronic_conditions}</span>
             </div>
           {/if}
         </div>
         <div class="grid grid-cols-2 gap-4">
-          <div class="p-5 rounded-2xl bg-white border border-slate-200 text-center">
-            <div class="text-3xl font-bold text-slate-800">{($activePatient.bloodwork || []).length}</div>
-            <div class="text-[10px] text-slate-400 font-bold uppercase mt-1">Bloodwork</div>
+          <div class="p-5 rounded-2xl bg-white dark:bg-sentinel-dark-surface-0 border border-slate-200 dark:border-slate-700 text-center">
+            <div class="text-3xl font-bold text-slate-800 dark:text-white">{($activePatient.bloodwork || []).length}</div>
+            <div class="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase mt-1">Bloodwork</div>
           </div>
-          <div class="p-5 rounded-2xl bg-white border border-slate-200 text-center">
-            <div class="text-3xl font-bold text-slate-800">{($activePatient.trauma_pins || []).length}</div>
-            <div class="text-[10px] text-slate-400 font-bold uppercase mt-1">Trauma</div>
+          <div class="p-5 rounded-2xl bg-white dark:bg-sentinel-dark-surface-0 border border-slate-200 dark:border-slate-700 text-center">
+            <div class="text-3xl font-bold text-slate-800 dark:text-white">{($activePatient.trauma_pins || []).length}</div>
+            <div class="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase mt-1">Trauma</div>
           </div>
-          <div class="p-5 rounded-2xl bg-white border border-slate-200 text-center">
-            <div class="text-3xl font-bold text-slate-800">{($activePatient.lab_reports || []).length}</div>
-            <div class="text-[10px] text-slate-400 font-bold uppercase mt-1">Lab Reports</div>
+          <div class="p-5 rounded-2xl bg-white dark:bg-sentinel-dark-surface-0 border border-slate-200 dark:border-slate-700 text-center">
+            <div class="text-3xl font-bold text-slate-800 dark:text-white">{($activePatient.lab_reports || []).length}</div>
+            <div class="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase mt-1">Lab Reports</div>
           </div>
-          <div class="p-5 rounded-2xl bg-white border border-slate-200 text-center">
+          <div class="p-5 rounded-2xl bg-white dark:bg-sentinel-dark-surface-0 border border-slate-200 dark:border-slate-700 text-center">
             <div class="text-2xl font-bold {flaggedValues.length > 0 ? 'text-red-600' : 'text-emerald-600'}">
               {flaggedValues.length}
             </div>
-            <div class="text-[10px] text-slate-400 font-bold uppercase mt-1">Flagged</div>
+            <div class="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase mt-1">Flagged</div>
           </div>
         </div>
       </div>
@@ -227,8 +227,8 @@
     {#if activeTab === 'bloodwork'}
       <div class="space-y-6" in:fade>
         {#if ($activePatient.bloodwork || []).length === 0}
-          <div class="p-12 rounded-2xl border-2 border-dashed border-slate-200 text-center bg-white">
-            <div class="text-sm text-slate-400">No bloodwork entries on file</div>
+          <div class="p-12 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700 text-center bg-white dark:bg-sentinel-dark-surface-0">
+            <div class="text-sm text-slate-400 dark:text-slate-500">No bloodwork entries on file</div>
           </div>
         {:else}
           <!-- SVG Trend Charts for common markers -->
@@ -248,8 +248,8 @@
                     date: e.test_date,
                   }))}
                 {#if points.length > 0}
-                  <div class="p-4 rounded-2xl bg-white border border-slate-200">
-                    <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">{marker.replace(/_/g, ' ')}</div>
+                  <div class="p-4 rounded-2xl bg-white dark:bg-sentinel-dark-surface-0 border border-slate-200 dark:border-slate-700">
+                    <div class="text-[10px] font-bold text-slate-500 dark:text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">{marker.replace(/_/g, ' ')}</div>
                     <svg viewBox="0 0 320 140" class="w-full h-28">
                       <!-- Grid lines -->
                       <line x1="30" y1="20" x2="30" y2="120" stroke="#e2e8f0" stroke-width="1"/>
@@ -278,7 +278,7 @@
                         </text>
                       {/each}
                     </svg>
-                    <div class="text-[9px] text-slate-400 text-right">{points[points.length-1]?.value} {points[points.length-1]?.unit}</div>
+                    <div class="text-[9px] text-slate-400 dark:text-slate-500 text-right">{points[points.length-1]?.value} {points[points.length-1]?.unit}</div>
                   </div>
                 {/if}
               {/each}
@@ -287,11 +287,11 @@
 
           <!-- Raw Data -->
           {#each $activePatient.bloodwork as entry, i}
-            <div class="p-5 rounded-2xl bg-white border border-slate-200" in:fly={{ y: 15, delay: i * 40 }}>
+            <div class="p-5 rounded-2xl bg-white dark:bg-sentinel-dark-surface-0 border border-slate-200 dark:border-slate-700" in:fly={{ y: 15, delay: i * 40 }}>
               <div class="flex justify-between items-start mb-4">
                 <div>
-                  <div class="text-sm font-bold text-slate-700">{entry.label || 'Bloodwork'}</div>
-                  <div class="text-[11px] text-slate-400 font-mono">📅 {new Date(entry.test_date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</div>
+                  <div class="text-sm font-bold text-slate-700 dark:text-slate-200">{entry.label || 'Bloodwork'}</div>
+                  <div class="text-[11px] text-slate-400 dark:text-slate-500 font-mono">📅 {new Date(entry.test_date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</div>
                 </div>
               </div>
               <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
@@ -323,13 +323,13 @@
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             {#each flaggedValues as item, i}
-              <div class="p-4 rounded-2xl bg-white border border-slate-200 hover:border-red-200 transition-all" in:fly={{ y: 10, delay: i * 30 }}>
+              <div class="p-4 rounded-2xl bg-white dark:bg-sentinel-dark-surface-0 border border-slate-200 dark:border-slate-700 hover:border-red-200 transition-all" in:fly={{ y: 10, delay: i * 30 }}>
                 <div class="flex items-center justify-between mb-2">
-                  <span class="text-xs font-bold text-slate-700 uppercase">{item.marker.replace(/_/g, ' ')}</span>
+                  <span class="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase">{item.marker.replace(/_/g, ' ')}</span>
                   <span class="text-[9px] px-2 py-0.5 rounded-full font-bold border {getStatusColor(item.status)}">{item.status}</span>
                 </div>
-                <div class="text-lg font-bold text-slate-800">{item.value} <span class="text-xs text-slate-400 font-normal">{item.unit}</span></div>
-                <div class="text-[10px] text-slate-400 mt-1">{item.label} · {new Date(item.testDate).toLocaleDateString()}</div>
+                <div class="text-lg font-bold text-slate-800 dark:text-white">{item.value} <span class="text-xs text-slate-400 dark:text-slate-500 font-normal">{item.unit}</span></div>
+                <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-1">{item.label} · {new Date(item.testDate).toLocaleDateString()}</div>
               </div>
             {/each}
           </div>
@@ -341,9 +341,9 @@
     {#if activeTab === 'insights'}
       <div class="space-y-6" in:fade>
         {#if !$activePatient.health_insights}
-          <div class="p-12 rounded-2xl border-2 border-dashed border-slate-200 text-center bg-white">
-            <div class="text-sm text-slate-400">No AI insights available</div>
-            <div class="text-xs text-slate-400 mt-1">Patient needs to run AI Analysis from their dashboard.</div>
+          <div class="p-12 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700 text-center bg-white dark:bg-sentinel-dark-surface-0">
+            <div class="text-sm text-slate-400 dark:text-slate-500">No AI insights available</div>
+            <div class="text-xs text-slate-400 dark:text-slate-500 mt-1">Patient needs to run AI Analysis from their dashboard.</div>
           </div>
         {:else}
           {@const ins = $activePatient.health_insights}
@@ -364,14 +364,14 @@
           </div>
 
           {#if ins.organ_risks}
-            <div class="p-6 rounded-2xl bg-white border border-slate-200">
-              <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Organ System Risks</div>
+            <div class="p-6 rounded-2xl bg-white dark:bg-sentinel-dark-surface-0 border border-slate-200 dark:border-slate-700">
+              <div class="text-xs font-bold text-slate-500 dark:text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-4">Organ System Risks</div>
               <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {#each Object.entries(ins.organ_risks) as [organ, data]}
-                  <div class="p-3 rounded-xl border border-slate-200 bg-slate-50/50">
-                    <div class="text-[10px] font-bold uppercase text-slate-500">{organ}</div>
+                  <div class="p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50">
+                    <div class="text-[10px] font-bold uppercase text-slate-500 dark:text-slate-400 dark:text-slate-500">{organ}</div>
                     <div class="flex items-center justify-between mt-1">
-                      <span class="text-lg font-bold text-slate-800">{data.score ?? 0}%</span>
+                      <span class="text-lg font-bold text-slate-800 dark:text-white">{data.score ?? 0}%</span>
                       <span class="text-[9px] font-bold px-2 py-0.5 rounded {
                         (data.score ?? 0) >= 50 ? 'bg-red-50 text-red-600' : (data.score ?? 0) >= 25 ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600'
                       }">{data.label || 'Normal'}</span>
@@ -383,10 +383,10 @@
           {/if}
 
           {#if ins.key_findings?.length}
-            <div class="p-6 rounded-2xl bg-white border border-slate-200">
-              <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Key Findings</div>
+            <div class="p-6 rounded-2xl bg-white dark:bg-sentinel-dark-surface-0 border border-slate-200 dark:border-slate-700">
+              <div class="text-xs font-bold text-slate-500 dark:text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">Key Findings</div>
               {#each ins.key_findings as finding}
-                <div class="flex items-start gap-2 text-xs text-slate-700 mb-1.5">
+                <div class="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-200 mb-1.5">
                   <span class="text-emerald-600 mt-0.5">•</span><span>{finding}</span>
                 </div>
               {/each}
@@ -397,7 +397,7 @@
             <div class="p-6 rounded-2xl bg-emerald-50 border border-emerald-200">
               <div class="text-xs font-bold text-emerald-700 uppercase tracking-wider mb-3">Recommendations</div>
               {#each ins.recommendations as rec}
-                <div class="flex items-start gap-2 text-xs text-slate-700 mb-1.5">
+                <div class="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-200 mb-1.5">
                   <span class="text-emerald-600">→</span><span>{rec}</span>
                 </div>
               {/each}
@@ -411,32 +411,32 @@
     {#if activeTab === 'trauma'}
       <div class="space-y-4" in:fade>
         {#if ($activePatient.trauma_pins || []).length === 0}
-          <div class="p-12 rounded-2xl border-2 border-dashed border-slate-200 text-center bg-white">
-            <div class="text-sm text-slate-400">No trauma records on file</div>
+          <div class="p-12 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700 text-center bg-white dark:bg-sentinel-dark-surface-0">
+            <div class="text-sm text-slate-400 dark:text-slate-500">No trauma records on file</div>
           </div>
         {:else}
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             {#each $activePatient.trauma_pins as pin, i}
-              <div class="p-5 rounded-2xl bg-white border border-slate-200 hover:border-red-200 transition-all" in:fly={{ y: 15, delay: i * 40 }}>
+              <div class="p-5 rounded-2xl bg-white dark:bg-sentinel-dark-surface-0 border border-slate-200 dark:border-slate-700 hover:border-red-200 transition-all" in:fly={{ y: 15, delay: i * 40 }}>
                 <div class="flex items-start gap-4">
                   <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0
                     {pin.severity === 'critical' ? 'bg-red-50 text-red-600 border border-red-200' :
                      pin.severity === 'high' ? 'bg-orange-50 text-orange-600 border border-orange-200' :
-                     'bg-slate-50 text-slate-500 border border-slate-200'}">
+                     'bg-slate-50 dark:bg-sentinel-dark-surface-1 text-slate-500 dark:text-slate-400 dark:text-slate-500 border border-slate-200 dark:border-slate-700'}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     </svg>
                   </div>
                   <div class="flex-1 space-y-1">
-                    <div class="text-sm font-bold text-slate-700">{pin.title || pin.body_region || 'Trauma'}</div>
+                    <div class="text-sm font-bold text-slate-700 dark:text-slate-200">{pin.title || pin.body_region || 'Trauma'}</div>
                     <div class="flex flex-wrap gap-2 text-[10px]">
-                      <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-500 font-semibold">{(pin.trauma_type || '').replace(/_/g, ' ')}</span>
+                      <span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 dark:text-slate-500 font-semibold">{(pin.trauma_type || '').replace(/_/g, ' ')}</span>
                       <span class="px-2 py-0.5 rounded font-bold uppercase
-                        {pin.severity === 'critical' ? 'bg-red-100 text-red-700' : pin.severity === 'high' ? 'bg-orange-100 text-orange-700' : 'bg-slate-100 text-slate-500'}">{pin.severity}</span>
-                      <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-500 font-semibold">{pin.body_region}</span>
+                        {pin.severity === 'critical' ? 'bg-red-100 text-red-700' : pin.severity === 'high' ? 'bg-orange-100 text-orange-700' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 dark:text-slate-500'}">{pin.severity}</span>
+                      <span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 dark:text-slate-500 font-semibold">{pin.body_region}</span>
                     </div>
                     {#if pin.notes}
-                      <div class="text-xs text-slate-400 mt-1">{pin.notes}</div>
+                      <div class="text-xs text-slate-400 dark:text-slate-500 mt-1">{pin.notes}</div>
                     {/if}
                   </div>
                 </div>
@@ -451,21 +451,21 @@
     {#if activeTab === 'reports'}
       <div class="space-y-3" in:fade>
         {#if ($activePatient.lab_reports || []).length === 0}
-          <div class="p-12 rounded-2xl border-2 border-dashed border-slate-200 text-center bg-white">
-            <div class="text-sm text-slate-400">No lab reports on file</div>
+          <div class="p-12 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700 text-center bg-white dark:bg-sentinel-dark-surface-0">
+            <div class="text-sm text-slate-400 dark:text-slate-500">No lab reports on file</div>
           </div>
         {:else}
           {#each $activePatient.lab_reports as report, i}
-            <div class="p-5 rounded-2xl bg-white border border-slate-200 flex justify-between items-center group hover:border-emerald-200 transition-all" in:fly={{ y: 10, delay: i * 30 }}>
+            <div class="p-5 rounded-2xl bg-white dark:bg-sentinel-dark-surface-0 border border-slate-200 dark:border-slate-700 flex justify-between items-center group hover:border-emerald-200 transition-all" in:fly={{ y: 10, delay: i * 30 }}>
               <div class="flex items-center gap-4">
-                <div class="w-10 h-10 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-center">
-                  <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-sentinel-dark-surface-1 flex items-center justify-center">
+                  <svg class="w-5 h-5 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
                 </div>
                 <div>
-                  <div class="text-xs font-bold text-slate-700">{report.file_name}</div>
-                  <div class="text-[10px] text-slate-400">{new Date(report.uploaded_at).toLocaleDateString()}</div>
+                  <div class="text-xs font-bold text-slate-700 dark:text-slate-200">{report.file_name}</div>
+                  <div class="text-[10px] text-slate-400 dark:text-slate-500">{new Date(report.uploaded_at).toLocaleDateString()}</div>
                 </div>
               </div>
               <button
@@ -473,7 +473,7 @@
                   const url = shareApi.getFileUrl($activeShareKey, $doctorSessions.find(s => s.shareKey === $activeShareKey)?.passcode, report.id);
                   window.open(url, '_blank');
                 }}
-                class="px-4 py-2 rounded-lg border border-slate-200 text-[10px] font-bold text-slate-400 hover:text-emerald-600 hover:border-emerald-300 transition-all opacity-0 group-hover:opacity-100"
+                class="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 text-[10px] font-bold text-slate-400 dark:text-slate-500 hover:text-emerald-600 hover:border-emerald-300 transition-all opacity-0 group-hover:opacity-100"
               >
                 View
               </button>
@@ -487,10 +487,10 @@
     {#if activeTab === 'notes'}
       <div class="space-y-6" in:fade>
         <!-- Create Note -->
-        <div class="p-6 rounded-2xl bg-white border border-slate-200 space-y-4">
-          <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">New Clinical Note</div>
+        <div class="p-6 rounded-2xl bg-white dark:bg-sentinel-dark-surface-0 border border-slate-200 dark:border-slate-700 space-y-4">
+          <div class="text-xs font-bold text-slate-500 dark:text-slate-400 dark:text-slate-500 uppercase tracking-wider">New Clinical Note</div>
           <div class="flex gap-3">
-            <select bind:value={noteCategory} class="text-xs border border-slate-200 rounded-lg px-3 py-2 bg-slate-50 focus:outline-none focus:border-emerald-300">
+            <select bind:value={noteCategory} class="text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 bg-slate-50 dark:bg-sentinel-dark-surface-1 focus:outline-none focus:border-emerald-300">
               <option value="observation">Observation</option>
               <option value="diagnosis">Diagnosis</option>
               <option value="follow_up">Follow-up</option>
@@ -501,7 +501,7 @@
             bind:value={newNote}
             rows="3"
             placeholder="Write your clinical note..."
-            class="w-full px-4 py-3 text-sm border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-100 focus:border-emerald-300 outline-none transition-all resize-none"
+            class="w-full px-4 py-3 text-sm border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-sentinel-dark-surface-1 focus:bg-white dark:bg-sentinel-dark-surface-0 focus:ring-2 focus:ring-emerald-100 focus:border-emerald-300 outline-none transition-all resize-none"
           ></textarea>
           <button
             on:click={createNote}
@@ -514,18 +514,18 @@
 
         <!-- Notes List -->
         {#if notes.length === 0}
-          <div class="p-8 rounded-2xl border-2 border-dashed border-slate-200 text-center bg-white">
-            <div class="text-sm text-slate-400">No notes yet for this patient</div>
+          <div class="p-8 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700 text-center bg-white dark:bg-sentinel-dark-surface-0">
+            <div class="text-sm text-slate-400 dark:text-slate-500">No notes yet for this patient</div>
           </div>
         {:else}
           {#each notes as note, i}
-            <div class="p-5 rounded-2xl bg-white border border-slate-200 group" in:fly={{ y: 10, delay: i * 30 }}>
+            <div class="p-5 rounded-2xl bg-white dark:bg-sentinel-dark-surface-0 border border-slate-200 dark:border-slate-700 group" in:fly={{ y: 10, delay: i * 30 }}>
               <div class="flex items-start justify-between mb-2">
                 <span class="text-[9px] px-2 py-0.5 rounded-full font-bold border {getCategoryColor(note.category)}">
                   {note.category.replace(/_/g, ' ')}
                 </span>
                 <div class="flex items-center gap-2">
-                  <span class="text-[10px] text-slate-400">{new Date(note.created_at).toLocaleString()}</span>
+                  <span class="text-[10px] text-slate-400 dark:text-slate-500">{new Date(note.created_at).toLocaleString()}</span>
                   <button
                     on:click={() => deleteNote(note.id)}
                     class="p-1 rounded text-slate-300 hover:text-red-500 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-all"
@@ -536,7 +536,7 @@
                   </button>
                 </div>
               </div>
-              <div class="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">{note.note_text}</div>
+              <div class="text-sm text-slate-700 dark:text-slate-200 leading-relaxed whitespace-pre-wrap">{note.note_text}</div>
             </div>
           {/each}
         {/if}

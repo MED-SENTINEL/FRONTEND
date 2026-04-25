@@ -44,7 +44,7 @@
   }
 </script>
 
-<div class="hud-panel p-8 border-dashed border-slate-200 bg-white hover:border-sentinel-optimal/40 transition-all group relative overflow-hidden">
+<div class="hud-panel p-8 border-dashed border-slate-200 dark:border-slate-700 bg-white dark:bg-sentinel-dark-surface-0 hover:border-sentinel-optimal/40 transition-all group relative overflow-hidden">
   <!-- Shimmer background on hover -->
   <div class="absolute inset-0 bg-gradient-to-r from-transparent via-sentinel-optimal/5 to-transparent -translate-x-full group-hover:animate-[shimmer_3s_infinite] pointer-events-none"></div>
 
@@ -70,14 +70,14 @@
 
     {#if !uploading}
       <div class="space-y-2">
-        <button on:click={triggerUpload} class="text-xs font-bold text-sentinel-text tracking-[0.3em] uppercase group-hover:text-sentinel-optimal transition-colors">
+        <button on:click={triggerUpload} class="text-xs font-bold text-sentinel-text dark:text-white tracking-[0.3em] uppercase group-hover:text-sentinel-optimal transition-colors">
           INITIALIZE_DATA_TRANSFER
         </button>
-        <div class="text-[9px] text-sentinel-dim tracking-widest font-mono uppercase">SUPPORTED_FORMATS: PDF // IMAGE // ARCHIVE</div>
+        <div class="text-[9px] text-sentinel-dim dark:text-slate-400 tracking-widest font-mono uppercase">SUPPORTED_FORMATS: PDF // IMAGE // ARCHIVE</div>
       </div>
     {:else}
       <div class="flex flex-col items-center space-y-4 w-full max-w-xs">
-        <div class="w-full h-1 bg-slate-100 rounded-full overflow-hidden">
+        <div class="w-full h-1 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
           <div class="h-full bg-sentinel-optimal animate-[shimmer_1.5s_infinite]"></div>
         </div>
         <div class="text-[10px] hud-text-optimal animate-pulse tracking-[0.4em] font-bold uppercase">UPLOADING_BIO_RECORDS...</div>
@@ -92,9 +92,3 @@
   </div>
 </div>
 
-<style>
-  @keyframes shimmer {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
-  }
-</style>

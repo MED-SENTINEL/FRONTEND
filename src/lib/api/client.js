@@ -1,4 +1,6 @@
 import * as env from '$env/static/public';
+import { toast } from '$lib/stores/toast';
+
 const BASE_URL = env.PUBLIC_API_BASE_URL || 'http://localhost:8000';
 
 
@@ -27,19 +29,39 @@ export async function apiFetch(endpoint, options = {}) {
         headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(url, {
-        ...options,
-        headers,
-    });
+    // Retry logic: 1 retry for network errors
+    let lastError;
+    for (let attempt = 0; attempt < 2; attempt++) {
+        try {
+            const response = await fetch(url, {
+                ...options,
+                headers,
+            });
 
-    if (!response.ok) {
-        const body = await response.json().catch(() => ({}));
-        const error = new Error(body.detail || `API Error: ${response.statusText}`);
-        error.status = response.status;
-        throw error;
+            if (!response.ok) {
+                const body = await response.json().catch(() => ({}));
+                const error = new Error(body.detail || `API Error: ${response.statusText}`);
+                error.status = response.status;
+                // Don't toast for auth errors (login/register handle those inline)
+                if (response.status !== 401 && response.status !== 422) {
+                    toast.error('Request Failed', error.message);
+                }
+                throw error;
+            }
+
+            return response.json();
+        } catch (err) {
+            lastError = err;
+            // Only retry on network errors (no status = fetch itself failed)
+            if (!err.status && attempt === 0) {
+                await new Promise(r => setTimeout(r, 1000));
+                continue;
+            }
+            throw err;
+        }
     }
-
-    return response.json();
+    toast.error('Connection Error', 'Unable to reach the server. Please check your connection.');
+    throw lastError;
 }
 
 
@@ -63,7 +85,9 @@ export async function apiUpload(endpoint, options = {}) {
 
     if (!response.ok) {
         const body = await response.json().catch(() => ({}));
-        throw new Error(body.detail || `Upload failed: ${response.statusText}`);
+        const error = new Error(body.detail || `Upload failed: ${response.statusText}`);
+        error.status = response.status;
+        throw error;
     }
     return response.json();
 }

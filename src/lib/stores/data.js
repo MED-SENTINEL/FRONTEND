@@ -32,8 +32,10 @@ export async function fetchMyData() {
 
     } catch (err) {
         // If we get a 404 or 401 for our own data, the DB was likely reset or token expired. Let's auto-logout to clear local cache.
-        if (err.status === 404 || err.status === 401 || err.message.includes('not found') || err.message.includes('expired') || err.message.includes('invalid token')) {
+        const msg = (err.message || '').toLowerCase();
+        if (err.status === 404 || err.status === 401 || msg.includes('not found') || msg.includes('expired') || msg.includes('invalid token')) {
             console.warn("Auth or user data issue, forcing logout to clear stale cache.");
+            // Dynamic import avoids circular dependency: data.js <-> auth.js
             import('./auth').then(({ logout }) => logout());
         } else {
             error.set(err.message);

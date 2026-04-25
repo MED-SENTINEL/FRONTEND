@@ -1,26 +1,33 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./src/**/*.{html,js,svelte,ts}'],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        // Core Palette - Medical Clean Light
-        'sentinel-bg': '#F8FAFC',      // Slate 50
-        'sentinel-surface-0': '#FFFFFF', // Pure White
-        'sentinel-surface-1': '#F1F5F9', // Slate 100
-        'sentinel-surface-2': '#E2E8F0', // Slate 200
+        // Core Palette - Adaptive (light + dark via CSS)
+        'sentinel-bg': '#F8FAFC',
+        'sentinel-surface-0': '#FFFFFF',
+        'sentinel-surface-1': '#F1F5F9',
+        'sentinel-surface-2': '#E2E8F0',
         
-        // Brand & Accents (Slightly adjusted for light mode contrast)
-        'sentinel-optimal': '#0891B2',   // Cyan 700 (Darker for legibility)
+        // Dark surfaces
+        'sentinel-dark-bg': '#0B0F19',
+        'sentinel-dark-surface-0': '#111827',
+        'sentinel-dark-surface-1': '#1E293B',
+        'sentinel-dark-surface-2': '#334155',
+        
+        // Brand & Accents
+        'sentinel-optimal': '#0891B2',
         'sentinel-optimal-glow': 'rgba(8, 145, 178, 0.15)',
-        'sentinel-accent': '#7C3AED',    // Purple 600
-        'sentinel-warning': '#D97706',   // Amber 600
-        'sentinel-critical': '#DC2626',  // Red 600
+        'sentinel-accent': '#7C3AED',
+        'sentinel-warning': '#D97706',
+        'sentinel-critical': '#DC2626',
         
-        // Typography - Dark for light mode
-        'sentinel-text': '#0F172A',      // Slate 900
-        'sentinel-muted': '#475569',     // Slate 700
-        'sentinel-dim': '#64748B',       // Slate 500
+        // Typography
+        'sentinel-text': '#0F172A',
+        'sentinel-muted': '#475569',
+        'sentinel-dim': '#64748B',
       },
       fontFamily: {
         sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],

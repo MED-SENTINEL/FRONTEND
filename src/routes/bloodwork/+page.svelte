@@ -186,10 +186,10 @@
 
   function getStatusColor(status) {
     switch (status) {
-      case 'critical': return 'text-red-600 bg-red-50 border-red-200';
-      case 'elevated': return 'text-amber-600 bg-amber-50 border-amber-200';
-      case 'low': return 'text-blue-600 bg-blue-50 border-blue-200';
-      default: return 'text-emerald-600 bg-emerald-50 border-emerald-200';
+      case 'critical': return 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/50 border-red-200 dark:border-red-800';
+      case 'elevated': return 'text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/50 border-amber-200 dark:border-amber-800';
+      case 'low': return 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/50 border-blue-200 dark:border-blue-800';
+      default: return 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800';
     }
   }
 
@@ -207,7 +207,7 @@
 
 <div class="space-y-8">
   <!-- ═══ HEADER ═══ -->
-  <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-slate-200 pb-8" in:fade>
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-slate-200 dark:border-slate-700 pb-8" in:fade>
     <div class="space-y-2">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sentinel-optimal/5 border border-sentinel-optimal/20 mb-2">
         <svg class="w-3 h-3 text-sentinel-optimal" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -215,10 +215,10 @@
         </svg>
         <span class="text-xs font-semibold text-sentinel-optimal">Manual Entry</span>
       </div>
-      <h1 class="text-4xl font-bold tracking-tight text-sentinel-text leading-tight">
+      <h1 class="text-4xl font-bold tracking-tight text-sentinel-text dark:text-white leading-tight">
         Blood<span class="text-sentinel-optimal italic font-bold">work</span>
       </h1>
-      <div class="text-sm text-sentinel-dim font-medium">Enter your lab test results manually. These feed directly into Health Insights.</div>
+      <div class="text-sm text-sentinel-dim dark:text-slate-400 font-medium">Enter your lab test results manually. These feed directly into Health Insights.</div>
     </div>
 
     <button
@@ -258,33 +258,33 @@
       <!-- Date & Label -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="space-y-2">
-          <label for="bw-date" class="text-xs font-bold text-sentinel-text uppercase tracking-wider">Test Date</label>
+          <label for="bw-date" class="text-xs font-bold text-sentinel-text dark:text-white uppercase tracking-wider">Test Date</label>
           <input
             id="bw-date"
             type="date"
             bind:value={testDate}
-            class="w-full px-4 py-2.5 text-sm border border-slate-200 rounded-xl bg-white focus:ring-2 focus:ring-sentinel-optimal/20 focus:border-sentinel-optimal/40 outline-none transition-all"
+            class="w-full px-4 py-2.5 text-sm border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-sentinel-dark-surface-0 focus:ring-2 focus:ring-sentinel-optimal/20 focus:border-sentinel-optimal/40 outline-none transition-all"
           />
         </div>
         <div class="space-y-2">
-          <label for="bw-label" class="text-xs font-bold text-sentinel-text uppercase tracking-wider">Label (optional)</label>
+          <label for="bw-label" class="text-xs font-bold text-sentinel-text dark:text-white uppercase tracking-wider">Label (optional)</label>
           <input
             id="bw-label"
             type="text"
             bind:value={label}
             placeholder="e.g., Annual Checkup, Liver Panel"
-            class="w-full px-4 py-2.5 text-sm border border-slate-200 rounded-xl bg-white focus:ring-2 focus:ring-sentinel-optimal/20 focus:border-sentinel-optimal/40 outline-none transition-all"
+            class="w-full px-4 py-2.5 text-sm border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-sentinel-dark-surface-0 focus:ring-2 focus:ring-sentinel-optimal/20 focus:border-sentinel-optimal/40 outline-none transition-all"
           />
         </div>
       </div>
 
       <!-- Test Category Selector -->
       <div class="space-y-4">
-        <div class="text-xs font-bold text-sentinel-text uppercase tracking-wider">Select Tests & Enter Values</div>
+        <div class="text-xs font-bold text-sentinel-text dark:text-white uppercase tracking-wider">Select Tests & Enter Values</div>
         
         {#each testCategories as category}
-          <div class="hud-panel p-4 bg-slate-50/50 border-slate-200 space-y-3">
-            <div class="text-xs font-bold text-sentinel-dim flex items-center gap-2">
+          <div class="hud-panel p-4 bg-slate-50/50 border-slate-200 dark:border-slate-700 space-y-3">
+            <div class="text-xs font-bold text-sentinel-dim dark:text-slate-400 flex items-center gap-2">
               <span>{category.icon}</span> {category.name}
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -293,12 +293,12 @@
                   <button
                     on:click={() => toggleTest(test.key)}
                     class="flex items-center gap-2 text-left text-xs font-medium py-1
-                      {selectedTests.includes(test.key) ? 'text-sentinel-optimal' : 'text-sentinel-dim hover:text-sentinel-text'} transition-colors"
+                      {selectedTests.includes(test.key) ? 'text-sentinel-optimal' : 'text-sentinel-dim dark:text-slate-400 hover:text-sentinel-text dark:text-white'} transition-colors"
                   >
                     <div class="w-4 h-4 rounded border flex items-center justify-center shrink-0
                       {selectedTests.includes(test.key) 
                         ? 'bg-sentinel-optimal border-sentinel-optimal text-white' 
-                        : 'border-slate-300 bg-white'}">
+                        : 'border-slate-300 dark:border-slate-600 bg-white dark:bg-sentinel-dark-surface-0'}">
                       {#if selectedTests.includes(test.key)}
                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
@@ -315,9 +315,9 @@
                         step="any"
                         bind:value={valueInputs[test.key]}
                         placeholder="Value"
-                        class="w-24 px-2.5 py-1.5 text-xs border border-slate-200 rounded-lg bg-white focus:ring-2 focus:ring-sentinel-optimal/20 focus:border-sentinel-optimal/40 outline-none"
+                        class="w-24 px-2.5 py-1.5 text-xs border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-sentinel-dark-surface-0 focus:ring-2 focus:ring-sentinel-optimal/20 focus:border-sentinel-optimal/40 outline-none"
                       />
-                      <span class="text-[10px] text-sentinel-dim">{test.unit}</span>
+                      <span class="text-[10px] text-sentinel-dim dark:text-slate-400">{test.unit}</span>
                       <span class="text-[9px] text-sentinel-dim/60 hidden sm:inline">Ref: {test.ref}</span>
                       {#if valueInputs[test.key] && !isNaN(parseFloat(valueInputs[test.key]))}
                         <span class="text-[9px] font-bold px-1.5 py-0.5 rounded border {getStatusColor(computeStatus(test.key, valueInputs[test.key]))}">
@@ -334,8 +334,8 @@
       </div>
 
       <!-- Submit -->
-      <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
-        <button on:click={() => showForm = false} class="px-5 py-2.5 text-sm rounded-xl border border-slate-200 text-sentinel-dim hover:bg-slate-50 transition-all">
+      <div class="flex justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-700/50">
+        <button on:click={() => showForm = false} class="px-5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 text-sentinel-dim dark:text-slate-400 hover:bg-slate-50 dark:bg-sentinel-dark-surface-1 transition-all">
           Cancel
         </button>
         <button
@@ -359,7 +359,7 @@
 
   <!-- ═══ PAST ENTRIES ═══ -->
   <div class="space-y-4">
-    <div class="text-xs font-bold text-sentinel-dim uppercase tracking-widest flex items-center gap-2">
+    <div class="text-xs font-bold text-sentinel-dim dark:text-slate-400 uppercase tracking-widest flex items-center gap-2">
       <div class="w-2 h-2 rounded-full bg-sentinel-optimal"></div>
       Your Records ({entries.length})
     </div>
@@ -367,21 +367,21 @@
     {#if loading}
       <div class="py-20 flex flex-col items-center justify-center space-y-4">
         <div class="w-6 h-6 rounded-full border-2 border-sentinel-optimal/20 border-t-sentinel-optimal animate-spin"></div>
-        <div class="text-xs text-sentinel-dim animate-pulse font-medium">Loading bloodwork history...</div>
+        <div class="text-xs text-sentinel-dim dark:text-slate-400 animate-pulse font-medium">Loading bloodwork history...</div>
       </div>
     {:else if entries.length === 0}
-      <div class="hud-panel p-16 text-center opacity-40 border-dashed bg-white">
-        <div class="text-sm text-sentinel-dim font-bold">No bloodwork entries yet</div>
+      <div class="hud-panel p-16 text-center opacity-40 border-dashed bg-white dark:bg-sentinel-dark-surface-0">
+        <div class="text-sm text-sentinel-dim dark:text-slate-400 font-bold">No bloodwork entries yet</div>
         <p class="text-xs text-sentinel-dim/60 mt-2">Click "New Entry" to add your first lab results.</p>
       </div>
     {:else}
       {#each entries as entry, i (entry.id)}
-        <div class="hud-panel p-5 bg-white border-slate-200 hover:border-sentinel-optimal/20 transition-all group" in:fly={{ y: 15, delay: i * 40 }}>
+        <div class="hud-panel p-5 bg-white dark:bg-sentinel-dark-surface-0 border-slate-200 dark:border-slate-700 hover:border-sentinel-optimal/20 transition-all group" in:fly={{ y: 15, delay: i * 40 }}>
           <!-- Header -->
           <div class="flex justify-between items-start mb-4">
             <div class="space-y-1">
-              <div class="text-sm font-bold text-sentinel-text">{entry.label || 'Bloodwork Entry'}</div>
-              <div class="text-[11px] text-sentinel-dim font-mono">
+              <div class="text-sm font-bold text-sentinel-text dark:text-white">{entry.label || 'Bloodwork Entry'}</div>
+              <div class="text-[11px] text-sentinel-dim dark:text-slate-400 font-mono">
                 📅 {new Date(entry.test_date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
                 <span class="mx-2 text-slate-300">•</span>
                 {Object.keys(entry.values || {}).length} test{Object.keys(entry.values || {}).length !== 1 ? 's' : ''}
@@ -389,7 +389,7 @@
             </div>
             <button
               on:click={() => deleteEntry(entry.id)}
-              class="px-3 py-1.5 rounded-lg border border-slate-200 text-[9px] font-bold text-sentinel-dim uppercase hover:text-sentinel-critical hover:border-sentinel-critical/30 hover:bg-sentinel-critical/5 transition-all opacity-0 group-hover:opacity-100"
+              class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-[9px] font-bold text-sentinel-dim dark:text-slate-400 uppercase hover:text-sentinel-critical hover:border-sentinel-critical/30 hover:bg-sentinel-critical/5 transition-all opacity-0 group-hover:opacity-100"
             >
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -413,14 +413,14 @@
   </div>
 
   <!-- ═══ INFO FOOTER ═══ -->
-  <div class="hud-panel p-5 bg-slate-50 border-slate-200" in:fade={{ delay: 200 }}>
+  <div class="hud-panel p-5 bg-slate-50 dark:bg-sentinel-dark-surface-1 border-slate-200 dark:border-slate-700" in:fade={{ delay: 200 }}>
     <div class="flex gap-4 items-start">
-      <div class="w-8 h-8 rounded-lg border border-slate-200 bg-white flex items-center justify-center shrink-0">
+      <div class="w-8 h-8 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-sentinel-dark-surface-0 flex items-center justify-center shrink-0">
         <span class="text-sentinel-optimal font-black text-sm">💉</span>
       </div>
       <div class="space-y-1">
-        <div class="text-xs font-bold text-sentinel-text">How it works</div>
-        <p class="text-[11px] text-sentinel-dim leading-relaxed">
+        <div class="text-xs font-bold text-sentinel-text dark:text-white">How it works</div>
+        <p class="text-[11px] text-sentinel-dim dark:text-slate-400 leading-relaxed">
           Enter your blood test values from your lab reports. SENTINEL automatically checks each value against medical reference ranges and
           flags anything unusual. These entries feed directly into <span class="font-semibold">Health Insights</span> for organ risk scoring,
           trend detection, and personalized recommendations.

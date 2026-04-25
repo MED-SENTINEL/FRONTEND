@@ -79,7 +79,7 @@
 
 <div class="space-y-12">
   <div
-    class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-slate-200 pb-10"
+    class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-slate-200 dark:border-slate-700 pb-10"
     in:fade
   >
     <div class="space-y-2">
@@ -101,10 +101,10 @@
         </svg>
         <span class="text-xs font-semibold text-sentinel-optimal">Secure Sharing Active</span>
       </div>
-      <h1 class="text-4xl font-bold tracking-tight text-sentinel-text leading-tight">
+      <h1 class="text-4xl font-bold tracking-tight text-sentinel-text dark:text-white leading-tight">
         Share <span class="text-sentinel-optimal italic font-bold">Records</span>
       </h1>
-      <div class="text-sm text-sentinel-dim font-medium">Manage secure access tokens for your healthcare providers.</div>
+      <div class="text-sm text-sentinel-dim dark:text-slate-400 font-medium">Manage secure access tokens for your healthcare providers.</div>
     </div>
 
     <button
@@ -131,17 +131,17 @@
   <!-- Generate Key Form -->
   {#if showGenerateForm}
     <div
-      class="hud-panel p-8 bg-white border-sentinel-optimal/20 space-y-6"
+      class="hud-panel p-8 bg-white dark:bg-sentinel-dark-surface-0 border-sentinel-optimal/20 space-y-6"
       in:fly={{ y: -10 }}
     >
-      <div class="text-sm font-bold text-sentinel-text border-b border-slate-200 pb-4 flex items-center gap-2">
+      <div class="text-sm font-bold text-sentinel-text dark:text-white border-b border-slate-200 dark:border-slate-700 pb-4 flex items-center gap-2">
         <div class="w-2 h-2 rounded-full bg-sentinel-optimal"></div>
         New Access Token Setup
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="space-y-2">
-          <label class="text-[11px] text-sentinel-dim font-bold px-1">Security Passcode (4-6 digits)*</label>
+          <label class="text-[11px] text-sentinel-dim dark:text-slate-400 font-bold px-1">Security Passcode (4-6 digits)*</label>
           <input
             type="text"
             bind:value={passcode}
@@ -153,7 +153,7 @@
         </div>
 
         <div class="space-y-2">
-          <label class="text-[11px] text-sentinel-dim font-bold px-1">Access Level</label>
+          <label class="text-[11px] text-sentinel-dim dark:text-slate-400 font-bold px-1">Access Level</label>
           <select bind:value={permissions} class="hud-input">
             <option value="full">Full Access</option>
             <option value="labs_only">Lab Reports Only</option>
@@ -161,7 +161,7 @@
         </div>
 
         <div class="space-y-2">
-          <label class="text-[11px] text-sentinel-dim font-bold px-1">Doctor Name</label>
+          <label class="text-[11px] text-sentinel-dim dark:text-slate-400 font-bold px-1">Doctor Name</label>
           <input
             type="text"
             bind:value={doctorName}
@@ -171,7 +171,7 @@
         </div>
 
         <div class="space-y-2">
-          <label class="text-[11px] text-sentinel-dim font-bold px-1">Expires In (Hours)</label>
+          <label class="text-[11px] text-sentinel-dim dark:text-slate-400 font-bold px-1">Expires In (Hours)</label>
           <input
             type="number"
             bind:value={expiresInHours}
@@ -182,7 +182,7 @@
         </div>
 
         <div class="space-y-2 md:col-span-2">
-          <label class="text-[11px] text-sentinel-dim font-bold px-1">Label (Optional)</label>
+          <label class="text-[11px] text-sentinel-dim dark:text-slate-400 font-bold px-1">Label (Optional)</label>
           <input
             type="text"
             bind:value={label}
@@ -211,17 +211,17 @@
   {/if}
 
   <div
-    class="hud-panel p-8 bg-white border-slate-200 space-y-8"
+    class="hud-panel p-8 bg-white dark:bg-sentinel-dark-surface-0 border-slate-200 dark:border-slate-700 space-y-8"
     in:fade={{ delay: 200 }}
   >
     <div
-      class="flex items-center justify-between border-b border-slate-200 pb-4"
+      class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-4"
     >
-      <div class="text-sm font-bold text-sentinel-text flex items-center gap-2">
+      <div class="text-sm font-bold text-sentinel-text dark:text-white flex items-center gap-2">
         <div class="w-2 h-2 rounded-full bg-sentinel-optimal"></div>
         Active Access Tokens
       </div>
-      <div class="text-[10px] font-semibold text-sentinel-dim">
+      <div class="text-[10px] font-semibold text-sentinel-dim dark:text-slate-400">
         Total Tokens: {keys.length.toString().padStart(2, "0")}
       </div>
     </div>
@@ -231,13 +231,13 @@
         <div
           class="w-8 h-8 rounded-full border-2 border-sentinel-optimal/20 border-t-sentinel-optimal animate-spin mx-auto"
         ></div>
-        <div class="text-xs text-sentinel-dim animate-pulse font-medium">Fetching active tokens...</div>
+        <div class="text-xs text-sentinel-dim dark:text-slate-400 animate-pulse font-medium">Fetching active tokens...</div>
       </div>
     {:else if keys.length === 0}
       <div
-        class="py-20 text-center space-y-4 opacity-50 border border-dashed border-slate-200 rounded-2xl bg-slate-50/50"
+        class="py-20 text-center space-y-4 opacity-50 border border-dashed border-slate-200 dark:border-slate-700 rounded-2xl bg-slate-50/50"
       >
-        <div class="text-sm text-sentinel-dim font-bold">No active tokens found</div>
+        <div class="text-sm text-sentinel-dim dark:text-slate-400 font-bold">No active tokens found</div>
         <p class="text-xs text-sentinel-dim/60 max-w-xs mx-auto">
           Create an access token to allow your healthcare providers secure access to your clinical records.
         </p>
@@ -248,8 +248,8 @@
           <div
             class="p-6 rounded-2xl border transition-all group flex flex-col gap-4
               {key.is_revoked
-              ? 'bg-slate-50 border-slate-200 opacity-50'
-              : 'bg-white border-slate-200 hover:border-sentinel-optimal/20'}"
+              ? 'bg-slate-50 dark:bg-sentinel-dark-surface-1 border-slate-200 dark:border-slate-700 opacity-50'
+              : 'bg-white dark:bg-sentinel-dark-surface-0 border-slate-200 dark:border-slate-700 hover:border-sentinel-optimal/20'}"
             in:fly={{ y: 10, delay: i * 100 }}
           >
             <div
@@ -257,7 +257,7 @@
             >
               <div class="flex flex-wrap gap-8">
                 <div class="space-y-1">
-                  <span class="text-[10px] text-sentinel-dim font-bold block">Access Token</span>
+                  <span class="text-[10px] text-sentinel-dim dark:text-slate-400 font-bold block">Access Token</span>
                   <div class="flex items-center gap-2">
                     <span
                       class="text-xs font-mono text-sentinel-optimal font-bold"
@@ -266,7 +266,7 @@
                     {#if !key.is_revoked}
                       <button
                         on:click={() => copyKey(key.share_key)}
-                        class="text-[8px] text-sentinel-dim hover:text-sentinel-optimal transition-colors uppercase tracking-widest"
+                        class="text-[8px] text-sentinel-dim dark:text-slate-400 hover:text-sentinel-optimal transition-colors uppercase tracking-widest"
                         title="Copy key"
                       >
                         📋
@@ -275,20 +275,20 @@
                   </div>
                 </div>
                 <div class="space-y-1">
-                  <span class="text-[10px] text-sentinel-dim font-bold block">Doctor</span>
-                  <span class="text-xs font-bold text-sentinel-text">{key.doctor_name || "Not Specified"}</span>
+                  <span class="text-[10px] text-sentinel-dim dark:text-slate-400 font-bold block">Doctor</span>
+                  <span class="text-xs font-bold text-sentinel-text dark:text-white">{key.doctor_name || "Not Specified"}</span>
                 </div>
                 <div class="space-y-1">
-                  <span class="text-[10px] text-sentinel-dim font-bold block">Access Level</span>
-                  <span class="text-xs font-semibold text-sentinel-text">{key.permissions}</span>
+                  <span class="text-[10px] text-sentinel-dim dark:text-slate-400 font-bold block">Access Level</span>
+                  <span class="text-xs font-semibold text-sentinel-text dark:text-white">{key.permissions}</span>
                 </div>
                 <div class="space-y-1">
-                  <span class="text-[10px] text-sentinel-dim font-bold block">Expires</span>
-                  <span class="text-xs text-sentinel-muted font-semibold">{new Date(key.expires_at).toLocaleDateString()}</span>
+                  <span class="text-[10px] text-sentinel-dim dark:text-slate-400 font-bold block">Expires</span>
+                  <span class="text-xs text-sentinel-muted dark:text-slate-400 font-semibold">{new Date(key.expires_at).toLocaleDateString()}</span>
                 </div>
                 <div class="space-y-1">
-                  <span class="text-[10px] text-sentinel-dim font-bold block">Uses</span>
-                  <span class="text-xs font-semibold text-sentinel-text">{key.usage_count}/{key.max_uses}</span>
+                  <span class="text-[10px] text-sentinel-dim dark:text-slate-400 font-bold block">Uses</span>
+                  <span class="text-xs font-semibold text-sentinel-text dark:text-white">{key.usage_count}/{key.max_uses}</span>
                 </div>
               </div>
 
@@ -309,7 +309,7 @@
             </div>
             {#if key.label}
               <div
-                class="text-[9px] text-sentinel-dim uppercase tracking-wider font-mono border-t border-slate-100 pt-3"
+                class="text-[9px] text-sentinel-dim dark:text-slate-400 uppercase tracking-wider font-mono border-t border-slate-100 dark:border-slate-700/50 pt-3"
               >
                 LABEL: {key.label}
               </div>
@@ -343,8 +343,8 @@
         </svg>
       </div>
       <div class="space-y-1">
-        <div class="text-xs font-bold text-sentinel-text">Security Information</div>
-        <p class="text-xs text-sentinel-dim leading-relaxed">
+        <div class="text-xs font-bold text-sentinel-text dark:text-white">Security Information</div>
+        <p class="text-xs text-sentinel-dim dark:text-slate-400 leading-relaxed">
           Each token provides temporary read-only access to your records. Share the key and passcode with your provider. Access can be revoked at any time.
         </p>
       </div>

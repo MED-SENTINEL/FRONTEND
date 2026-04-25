@@ -14,6 +14,7 @@
   import { REGION_COORDINATES } from "$lib/constants";
   import { apiFetch } from "$lib/api/client";
   import { fade, fly } from "svelte/transition";
+  import { toast } from '$lib/stores/toast';
 
   let adding = false;
   let deleting = null; // Track which record is being deleted
@@ -77,8 +78,10 @@
       });
       resetForm();
       await fetchMyData();
+      toast.success('Record Added', 'Medical record has been saved to your vault.');
     } catch (err) {
       console.error(err);
+      toast.error('Save Failed', err.message || 'Could not save the medical record.');
     } finally {
       adding = false;
     }
@@ -88,8 +91,10 @@
     deleting = pinId;
     try {
       await deleteTraumaPin(pinId);
+      toast.success('Record Removed', 'The medical record has been deleted.');
     } catch (err) {
       console.error(err);
+      toast.error('Delete Failed', err.message || 'Could not delete the record.');
     } finally {
       deleting = null;
     }
@@ -186,7 +191,7 @@
     <!-- Welcome Hero -->
     <section class="relative" in:fade>
       <div
-        class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 border-b border-slate-200 pb-10"
+        class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 border-b border-slate-200 dark:border-slate-700 pb-10"
       >
         <div class="space-y-3">
           <div
@@ -204,10 +209,10 @@
               >Secure Connection Active</span
             >
           </div>
-          <h1 class="text-4xl font-bold tracking-tight text-sentinel-text">
+          <h1 class="text-4xl font-bold tracking-tight text-sentinel-text dark:text-white">
             Patient Dashboard
           </h1>
-          <div class="text-sm text-sentinel-dim flex items-center gap-3">
+          <div class="text-sm text-sentinel-dim dark:text-slate-400 flex items-center gap-3">
             <span>Medical Vault</span>
             <span class="w-1.5 h-1.5 rounded-full bg-slate-200"></span>
             <span
@@ -237,7 +242,7 @@
           </a>
           <a
             href="/reports"
-            class="hud-button !border-slate-200 !bg-slate-50 !text-sentinel-dim hover:!border-sentinel-optimal/50 whitespace-nowrap group"
+            class="hud-button !border-slate-200 !bg-slate-50 dark:!bg-sentinel-dark-surface-1 !text-sentinel-dim dark:!text-slate-300 hover:!border-sentinel-optimal/50 whitespace-nowrap group"
           >
             <svg
               class="w-4 h-4 group-hover:rotate-12 transition-transform"
@@ -373,7 +378,7 @@
     >
       <div class="flex items-center justify-between">
         <h2
-          class="text-sm font-bold text-sentinel-text flex items-center gap-3"
+          class="text-sm font-bold text-sentinel-text dark:text-white flex items-center gap-3"
         >
           <div class="w-2 h-2 bg-sentinel-warning rounded-sm"></div>
           Medical History
@@ -528,7 +533,7 @@
           <button
             on:click={addMedicalRecord}
             disabled={adding || !$traumaForm.title}
-            class="hud-button w-full py-2.5"
+            class="hud-button hud-button-accent w-full py-2.5"
           >
             {#if adding}
               <div
@@ -588,7 +593,7 @@
                   </div>
                   <div class="space-y-1">
                     <div
-                      class="text-sm font-bold text-sentinel-text uppercase tracking-wider"
+                      class="text-sm font-bold text-sentinel-text dark:text-white uppercase tracking-wider"
                     >
                       {record.title || "MEDICAL EVENT"}
                     </div>
@@ -667,7 +672,7 @@
     >
       <div class="space-y-6">
         <h2
-          class="text-sm font-bold text-sentinel-text flex items-center gap-3"
+          class="text-sm font-bold text-sentinel-text dark:text-white flex items-center gap-3"
         >
           <div class="w-2 h-2 bg-sentinel-optimal rounded-sm"></div>
           Quick Actions
@@ -813,3 +818,4 @@
     </section>
   {/if}
 </div>
+

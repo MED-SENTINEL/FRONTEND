@@ -16,36 +16,53 @@
     { label: 'Activity', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', href: '/timeline' },
   ];
 
+  // Bottom nav shows first 4 + "More"
+  const bottomNavItems = navItems.slice(0, 4);
+
   $: activePath = $page.url.pathname;
 </script>
 
-<!-- Mobile Toggle -->
-<button
-  on:click={() => isOpen = !isOpen}
-  class="lg:hidden fixed bottom-6 right-6 w-14 h-14 rounded-full hud-panel border-sentinel-optimal/50 flex items-center justify-center z-[100] hud-text-optimal hover:scale-110 active:scale-95 transition-all"
->
-  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    {#if isOpen}
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-    {:else}
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-    {/if}
-  </svg>
-</button>
+<!-- ═══ MOBILE BOTTOM NAV ═══ -->
+<nav class="lg:hidden fixed bottom-0 left-0 right-0 z-[100] border-t border-slate-200 dark:border-slate-700/60 bg-white/95 dark:bg-sentinel-dark-surface-0/95 backdrop-blur-xl px-2 pb-[env(safe-area-inset-bottom)]">
+  <div class="flex items-center justify-around h-16">
+    {#each bottomNavItems as item}
+      <a
+        href={item.href}
+        class="flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-xl transition-all min-w-[56px] {activePath === item.href ? 'text-sentinel-optimal' : 'text-slate-400 dark:text-slate-500'}"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={item.icon} />
+        </svg>
+        <span class="text-[9px] font-bold">{item.label}</span>
+      </a>
+    {/each}
+    <!-- More button -->
+    <button
+      on:click={() => isOpen = !isOpen}
+      class="flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-xl transition-all min-w-[56px] {isOpen ? 'text-sentinel-optimal' : 'text-slate-400 dark:text-slate-500'}"
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+      </svg>
+      <span class="text-[9px] font-bold">More</span>
+    </button>
+  </div>
+</nav>
 
+<!-- ═══ DESKTOP SIDEBAR ═══ -->
 <aside
-  class="fixed lg:static inset-y-0 left-0 w-64 lg:w-56 border-r border-slate-200 bg-white/80 backdrop-blur-3xl flex flex-col py-8 overflow-y-auto shrink-0 z-50 transition-transform duration-500 cubic-bezier(0.4, 0, 0.2, 1) lg:translate-x-0 {isOpen ? 'translate-x-0' : '-translate-x-full'}"
+  class="hidden lg:flex fixed lg:static inset-y-0 left-0 w-56 border-r border-slate-200 dark:border-slate-700/60 bg-white/80 dark:bg-sentinel-dark-surface-0/80 backdrop-blur-3xl flex-col py-8 overflow-y-auto shrink-0 z-50"
 >
   <!-- Logo Section -->
   <div class="px-8 mb-12">
     <div class="flex items-center gap-3">
       <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-sentinel-optimal to-sentinel-optimal/20 flex items-center justify-center shadow-lg shadow-sentinel-optimal/20">
-        <svg class="w-5 h-5 text-sentinel-bg" fill="currentColor" viewBox="0 0 24 24">
+        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
           <path d="M12 2L3 7v9c0 5.25 3.84 10.13 9 11.5 5.16-1.37 9-6.25 9-11.5V7l-9-5z"/>
         </svg>
       </div>
       <div>
-        <div class="text-sm font-bold text-sentinel-text">Sentinel</div>
+        <div class="text-sm font-bold text-sentinel-text dark:text-white">Sentinel</div>
         <div class="text-[10px] text-sentinel-optimal font-semibold">Patient Portal</div>
       </div>
     </div>
@@ -55,17 +72,16 @@
     {#each navItems as item}
       <a
         href={item.href}
-        on:click={() => isOpen = false}
-        class="flex items-center gap-4 px-5 py-3 rounded-xl transition-all duration-300 relative group {activePath === item.href ? 'bg-sentinel-optimal/10' : 'hover:bg-slate-100'}"
+        class="flex items-center gap-4 px-5 py-3 rounded-xl transition-all duration-300 relative group {activePath === item.href ? 'bg-sentinel-optimal/10 dark:bg-sentinel-optimal/15' : 'hover:bg-slate-100 dark:hover:bg-slate-800'}"
       >
         {#if activePath === item.href}
           <div class="absolute left-0 top-2 bottom-2 w-1 rounded-full bg-sentinel-optimal" in:fade></div>
         {/if}
         
-        <svg class="w-5 h-5 {activePath === item.href ? 'text-sentinel-optimal' : 'text-sentinel-dim group-hover:text-sentinel-optimal'} transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-5 h-5 {activePath === item.href ? 'text-sentinel-optimal' : 'text-sentinel-dim dark:text-slate-400 group-hover:text-sentinel-optimal'} transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={item.icon} />
         </svg>
-        <span class="text-sm font-medium {activePath === item.href ? 'text-sentinel-optimal' : 'text-sentinel-dim group-hover:text-slate-700'} transition-colors">
+        <span class="text-sm font-medium {activePath === item.href ? 'text-sentinel-optimal' : 'text-sentinel-dim dark:text-slate-300 group-hover:text-slate-700 dark:group-hover:text-white'} transition-colors">
           {item.label}
         </span>
       </a>
@@ -74,22 +90,22 @@
 
   <!-- Profile Footer -->
   <div class="mt-auto px-4 pt-6 mt-8">
-    <div class="hud-panel p-4 bg-slate-50/50 rounded-2xl border-slate-200 hover:border-sentinel-optimal/20 transition-all space-y-4">
+    <div class="hud-panel p-4 bg-slate-50/50 dark:bg-sentinel-dark-surface-1/50 rounded-2xl border-slate-200 dark:border-slate-700 hover:border-sentinel-optimal/20 transition-all space-y-4">
       {#if $currentUser}
         <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-full bg-sentinel-surface-2 border border-sentinel-optimal/20 flex items-center justify-center text-[10px] font-bold text-sentinel-optimal uppercase">
+          <div class="w-8 h-8 rounded-full bg-sentinel-surface-2 dark:bg-sentinel-dark-surface-2 border border-sentinel-optimal/20 flex items-center justify-center text-[10px] font-bold text-sentinel-optimal uppercase">
             {$currentUser.full_name?.substring(0, 2) || 'SU'}
           </div>
           <div class="min-w-0">
-            <div class="text-xs font-bold text-sentinel-text truncate">{$currentUser.full_name}</div>
-            <div class="text-[10px] text-sentinel-dim truncate">{$currentUser.email}</div>
+            <div class="text-xs font-bold text-sentinel-text dark:text-white truncate">{$currentUser.full_name}</div>
+            <div class="text-[10px] text-sentinel-dim dark:text-slate-400 truncate">{$currentUser.email}</div>
           </div>
         </div>
       {/if}
       
       <button
         on:click={logout}
-        class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:text-sentinel-critical hover:border-sentinel-critical/30 transition-all"
+        class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-sentinel-dark-surface-0 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-red-950/30 hover:text-sentinel-critical hover:border-sentinel-critical/30 transition-all"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -100,11 +116,32 @@
   </div>
 </aside>
 
+<!-- Mobile slide-out (for "More" items) -->
 {#if isOpen}
   <button
     on:click={() => isOpen = false}
-    class="lg:hidden fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-40 w-full h-full border-none cursor-default"
-    aria-label="Close Sidebar"
+    class="lg:hidden fixed inset-0 bg-slate-900/30 dark:bg-black/50 backdrop-blur-sm z-40 w-full h-full border-none cursor-default"
+    aria-label="Close menu"
     transition:fade={{ duration: 200 }}
   ></button>
+  
+  <div
+    class="lg:hidden fixed bottom-16 left-0 right-0 z-[90] p-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)]"
+    transition:fade={{ duration: 200 }}
+  >
+    <div class="bg-white dark:bg-sentinel-dark-surface-0 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl p-3 grid grid-cols-4 gap-2">
+      {#each navItems.slice(4) as item}
+        <a
+          href={item.href}
+          on:click={() => isOpen = false}
+          class="flex flex-col items-center justify-center gap-1.5 px-2 py-3 rounded-xl transition-all {activePath === item.href ? 'bg-sentinel-optimal/10 text-sentinel-optimal' : 'text-slate-400 dark:text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800'}"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={item.icon} />
+          </svg>
+          <span class="text-[9px] font-bold text-center leading-tight">{item.label}</span>
+        </a>
+      {/each}
+    </div>
+  </div>
 {/if}

@@ -57,19 +57,19 @@
     if (!text) return '';
     return text
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-      .replace(/^### (.+)$/gm, '<h4 class="text-xs font-bold text-slate-700 mt-3 mb-1 uppercase tracking-wider">$1</h4>')
-      .replace(/^## (.+)$/gm, '<h3 class="text-sm font-bold text-slate-700 mt-3 mb-1">$1</h3>')
+      .replace(/^### (.+)$/gm, '<h4 class="text-xs font-bold text-slate-700 dark:text-slate-200 mt-3 mb-1 uppercase tracking-wider">$1</h4>')
+      .replace(/^## (.+)$/gm, '<h3 class="text-sm font-bold text-slate-700 dark:text-slate-200 mt-3 mb-1">$1</h3>')
       .replace(/\*\*(.+?)\*\*/g, '<strong class="font-bold">$1</strong>')
       .replace(/\*(.+?)\*/g, '<em class="italic opacity-80">$1</em>')
       .replace(/^- (.+)$/gm, '<div class="flex items-start gap-1.5 ml-1"><span class="text-emerald-600 mt-0.5">•</span><span>$1</span></div>')
-      .replace(/^(\d+)\. (.+)$/gm, '<div class="flex items-start gap-1.5 ml-1"><span class="text-slate-500 font-bold">$1.</span><span>$2</span></div>')
+      .replace(/^(\d+)\. (.+)$/gm, '<div class="flex items-start gap-1.5 ml-1"><span class="text-slate-500 dark:text-slate-400 dark:text-slate-500 font-bold">$1.</span><span>$2</span></div>')
       .replace(/\n/g, '<br/>');
   }
 </script>
 
 <div class="space-y-6">
   <!-- Header -->
-  <div class="border-b border-slate-200 pb-6" in:fade>
+  <div class="border-b border-slate-200 dark:border-slate-700 pb-6" in:fade>
     <div class="flex items-center gap-4 mb-3">
       <div class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center">
         <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -77,8 +77,8 @@
         </svg>
       </div>
       <div>
-        <h1 class="text-xl font-bold text-slate-800">Clinical LISA</h1>
-        <div class="text-xs text-slate-400">
+        <h1 class="text-xl font-bold text-slate-800 dark:text-white">Clinical LISA</h1>
+        <div class="text-xs text-slate-400 dark:text-slate-500">
           AI assistant with clinical context
           {#if $activePatient}
             · Reviewing <span class="font-semibold text-emerald-600">{$activePatient.patient_profile?.full_name}</span>
@@ -89,13 +89,13 @@
   </div>
 
   {#if !$activePatient}
-    <div class="p-12 rounded-2xl border-2 border-dashed border-slate-200 text-center bg-white">
-      <div class="text-sm text-slate-500 font-semibold mb-1">No patient context loaded</div>
+    <div class="p-12 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700 text-center bg-white dark:bg-sentinel-dark-surface-0">
+      <div class="text-sm text-slate-500 dark:text-slate-400 dark:text-slate-500 font-semibold mb-1">No patient context loaded</div>
       <a href="/doctor/access" class="text-xs text-emerald-600 font-bold hover:underline">Access a patient first →</a>
     </div>
   {:else}
     <!-- Chat Container -->
-    <div class="rounded-2xl bg-white border border-slate-200 overflow-hidden shadow-sm">
+    <div class="rounded-2xl bg-white dark:bg-sentinel-dark-surface-0 border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
       <!-- Messages -->
       <div id="clinical-chat-scroll" class="h-[520px] overflow-y-auto p-5 space-y-3 bg-slate-50/30">
         {#if chatMessages.length === 0}
@@ -106,15 +106,15 @@
               </svg>
             </div>
             <div class="space-y-1">
-              <div class="text-sm font-bold text-slate-700">Clinical Assistant</div>
-              <div class="text-xs text-slate-400 max-w-sm">
+              <div class="text-sm font-bold text-slate-700 dark:text-slate-200">Clinical Assistant</div>
+              <div class="text-xs text-slate-400 dark:text-slate-500 max-w-sm">
                 LISA is loaded with {$activePatient.patient_profile?.full_name}'s records. Ask clinical questions:
               </div>
             </div>
             <div class="flex flex-wrap gap-2 justify-center max-w-md">
               {#each quickQuestions as q}
                 <button 
-                  class="text-[11px] px-3 py-1.5 rounded-full border border-emerald-200 text-emerald-700 bg-white hover:bg-emerald-50 transition-colors font-medium"
+                  class="text-[11px] px-3 py-1.5 rounded-full border border-emerald-200 text-emerald-700 bg-white dark:bg-sentinel-dark-surface-0 hover:bg-emerald-50 transition-colors font-medium"
                   on:click={() => { chatInput = q; sendChat(); }}
                 >
                   {q}
@@ -127,14 +127,14 @@
             <div class="flex {msg.role === 'user' ? 'justify-end' : 'justify-start'}" in:fly={{ y: 10 }}>
               <div class="max-w-[80%] {msg.role === 'user' 
                 ? 'bg-emerald-600 text-white rounded-2xl rounded-br-md' 
-                : 'bg-white border border-slate-200 text-slate-700 rounded-2xl rounded-bl-md'} px-4 py-3 shadow-sm">
+                : 'bg-white dark:bg-sentinel-dark-surface-0 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 rounded-2xl rounded-bl-md'} px-4 py-3 shadow-sm">
                 {#if msg.role === 'assistant'}
                   <div class="text-[13px] leading-relaxed">{@html renderMarkdown(msg.text)}</div>
                 {:else}
                   <div class="text-[13px] leading-relaxed">{msg.text}</div>
                 {/if}
                 {#if msg.context}
-                  <div class="text-[9px] mt-2 {msg.role === 'user' ? 'text-white/50' : 'text-slate-400'}">
+                  <div class="text-[9px] mt-2 {msg.role === 'user' ? 'text-white/50' : 'text-slate-400 dark:text-slate-500'}">
                     Based on {msg.context} medical records
                   </div>
                 {/if}
@@ -143,7 +143,7 @@
           {/each}
           {#if chatLoading}
             <div class="flex justify-start" in:fade>
-              <div class="bg-white border border-slate-200 rounded-2xl rounded-bl-md px-4 py-3 shadow-sm">
+              <div class="bg-white dark:bg-sentinel-dark-surface-0 border border-slate-200 dark:border-slate-700 rounded-2xl rounded-bl-md px-4 py-3 shadow-sm">
                 <div class="flex items-center gap-1.5">
                   <div class="w-2 h-2 bg-emerald-400 rounded-full animate-bounce" style="animation-delay: 0ms"></div>
                   <div class="w-2 h-2 bg-emerald-400 rounded-full animate-bounce" style="animation-delay: 150ms"></div>
@@ -156,7 +156,7 @@
       </div>
 
       <!-- Input -->
-      <div class="p-4 border-t border-slate-200 bg-white">
+      <div class="p-4 border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-sentinel-dark-surface-0">
         <div class="flex gap-2">
           <input
             type="text"
@@ -164,7 +164,7 @@
             on:keydown={handleKeydown}
             placeholder="Ask a clinical question..."
             disabled={chatLoading}
-            class="flex-1 px-4 py-2.5 text-sm border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-100 focus:border-emerald-300 outline-none transition-all"
+            class="flex-1 px-4 py-2.5 text-sm border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-sentinel-dark-surface-1 focus:bg-white dark:bg-sentinel-dark-surface-0 focus:ring-2 focus:ring-emerald-100 focus:border-emerald-300 outline-none transition-all"
           />
           <button
             on:click={sendChat}

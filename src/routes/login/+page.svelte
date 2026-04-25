@@ -52,9 +52,9 @@
   }
 </script>
 
-<div class="min-h-screen flex items-center justify-center bg-sentinel-bg relative overflow-hidden p-6 selection:bg-sentinel-optimal/10">
+<div class="min-h-screen flex items-center justify-center bg-sentinel-bg dark:bg-sentinel-dark-bg relative overflow-hidden p-6 selection:bg-sentinel-optimal/10">
   <!-- Dynamic Background Grid -->
-  <div class="absolute inset-0 opacity-40 pointer-events-none" 
+  <div class="absolute inset-0 opacity-40 dark:opacity-20 pointer-events-none" 
        style="background-image: radial-gradient(circle at 2px 2px, rgba(8, 145, 178, 0.1) 1px, transparent 0); background-size: 40px 40px;"></div>
   <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(8, 145, 178, 0.03)_0%,transparent_70%)] pointer-events-none"></div>
 
@@ -66,14 +66,14 @@
           <path d="M12 2L3 7v9c0 5.25 3.84 10.13 9 11.5 5.16-1.37 9-6.25 9-11.5V7l-9-5z"/>
         </svg>
       </div>
-      <h1 class="text-4xl font-bold tracking-tight text-sentinel-text">Sentinel</h1>
+      <h1 class="text-4xl font-bold tracking-tight text-sentinel-text dark:text-white">Sentinel</h1>
       <div class="h-1 w-12 bg-sentinel-optimal/20 mx-auto rounded-full"></div>
-      <div class="text-sm text-sentinel-muted font-medium">Secure Patient Portal</div>
+      <div class="text-sm text-sentinel-muted dark:text-slate-400 font-medium">Secure Patient Portal</div>
     </div>
 
     <!-- Login Card -->
-    <div class="hud-panel p-8 bg-white/50 border-slate-200 shadow-2xl space-y-8">
-      <div class="text-sm font-semibold text-sentinel-text border-b border-slate-100 pb-4">Sign in to your account</div>
+    <div class="hud-panel p-8 bg-white/50 dark:bg-sentinel-dark-surface-0/80 border-slate-200 dark:border-slate-700 shadow-2xl space-y-8">
+      <div class="text-sm font-semibold text-sentinel-text dark:text-white border-b border-slate-100 dark:border-slate-700 pb-4">Sign in to your account</div>
 
       {#if errorMsg}
         <div class="p-4 rounded-lg bg-sentinel-critical/10 border border-sentinel-critical/20 text-[10px] hud-text-critical uppercase tracking-widest leading-relaxed" in:fade>
@@ -83,7 +83,7 @@
 
       <form on:submit|preventDefault={handleLogin} class="space-y-6">
         <div class="space-y-2">
-          <label for="email" class="text-sm text-sentinel-dim font-medium px-1">Email Address</label>
+          <label for="email" class="text-sm text-sentinel-dim dark:text-slate-400 font-medium px-1">Email Address</label>
           <input
             id="email"
             type="email"
@@ -95,7 +95,7 @@
         </div>
 
         <div class="space-y-2">
-          <label for="password" class="text-sm text-sentinel-dim font-medium px-1">Password</label>
+          <label for="password" class="text-sm text-sentinel-dim dark:text-slate-400 font-medium px-1">Password</label>
           <input
             id="password"
             type="password"
@@ -109,22 +109,22 @@
         <button
           type="submit"
           disabled={submitting}
-          class="w-full hud-button py-3.5 text-xs tracking-[0.3em]"
+          class="w-full hud-button hud-button-accent py-3.5 text-xs tracking-[0.3em]"
         >
           {submitting ? 'Signing in...' : 'Sign In'}
         </button>
 
         <div class="relative flex items-center py-2">
-          <div class="flex-grow border-t border-slate-200"></div>
-          <span class="shrink-0 px-4 text-[10px] text-sentinel-dim font-bold tracking-[0.2em] uppercase">OR</span>
-          <div class="flex-grow border-t border-slate-200"></div>
+          <div class="flex-grow border-t border-slate-200 dark:border-slate-700"></div>
+          <span class="shrink-0 px-4 text-[10px] text-sentinel-dim dark:text-slate-400 font-bold tracking-[0.2em] uppercase">OR</span>
+          <div class="flex-grow border-t border-slate-200 dark:border-slate-700"></div>
         </div>
 
         <button
           type="button"
           on:click={handleGoogleLogin}
           disabled={wakingUp}
-          class="w-full h-12 flex items-center justify-center gap-3 bg-white border border-slate-200 text-slate-700 font-bold uppercase tracking-wider text-[11px] hover:bg-slate-50 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+          class="w-full h-12 flex items-center justify-center gap-3 bg-white dark:bg-sentinel-dark-surface-1 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 font-bold uppercase tracking-wider text-[11px] hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed rounded-xl"
         >
           {#if wakingUp}
             <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-slate-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -145,10 +145,10 @@
 
       </form>
 
-      <div class="pt-6 border-t border-slate-200 flex flex-col items-center gap-4">
+      <div class="pt-6 border-t border-slate-200 dark:border-slate-700 flex flex-col items-center gap-4 text-sm text-sentinel-dim dark:text-slate-400">
           New patient? <a href="/register" class="text-sentinel-optimal hover:underline font-bold">Create an account</a>
         
-        <div class="px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-[8px] text-sentinel-dim tracking-widest font-mono">
+        <div class="px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[8px] text-sentinel-dim dark:text-slate-400 tracking-widest font-mono">
           DEMO: demo@sentinel.dev / sentinel123
         </div>
       </div>

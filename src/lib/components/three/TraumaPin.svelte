@@ -10,7 +10,6 @@
   export let traumaType = "condition";
   export let description = "";
   export let bodyRegion = "";
-  export let active = false;
   export let pinId = "";
 
   const dispatch = createEventDispatcher();
